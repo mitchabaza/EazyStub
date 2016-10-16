@@ -1,0 +1,69 @@
+########################################################
+# 
+# Visual Studio temporary files, build results, etc
+#
+########################################################
+
+# User-specific files
+*.suo
+*.user
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# ReSharper is a .NET coding add-in
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# TeamCity is a build add-in
+_TeamCity*
+
+# node.js modules directory
+node_modules/
+
+# Click-Once directory
+publish/
+
+# NuGet Packages
+*.nupkg
+packages/
+
+*.ncrunchsolution
+*.ncrunchproject
+
+# Ignore all directories called Logs anywhere below the current level
+Logs/
+
+/app/identifi.app/Identifi.App.Web.App/Scripts/*.js
+/app/identifi.app/Identifi.App.Web.App/Scripts/*.map
+/app/identifi.app/Identifi.App.Web.App/Assets/Css
+/app/identifi.app/Identifi.App.Web.App/Assets/Images
+/app/identifi.app/Identifi.App.Web.App/Assets/Fonts
+/.project
+/app/identifi.app/Identifi.Web.ClientApp/output/js_test_results.xml
+/app/identifi.app/Identifi.App.Web.Admin/appSettings.config
+*.log
+
+app/identifi.app/Identifi.App.Service.Tests/appSettings.config
+app/identifi.app/Identifi.App.Web.App/appSettings.config
+
+# Visual Studio 2015 cache/options directory
+.vs/
+
+# WebStorm IDE project files
+.idea/
+/app/identifi.app/Identifi.App.Web.App/SupportedBrowsers.config.json
