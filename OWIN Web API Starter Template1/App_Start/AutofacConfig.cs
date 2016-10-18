@@ -29,7 +29,7 @@ namespace Latsos.Web
             var builder = new ContainerBuilder();
 
             // Other components can be registered here.
-            builder.RegisterType<MockRequestHandler>().As<DelegatingHandler>().InstancePerRequest();
+            builder.RegisterType<StubRequestHandler>().As<DelegatingHandler>().InstancePerRequest();
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
             builder.RegisterAssemblyTypes(typeof(RequestEvaluator).Assembly).AsImplementedInterfaces().SingleInstance();
        

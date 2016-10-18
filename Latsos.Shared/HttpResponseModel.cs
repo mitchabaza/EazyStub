@@ -4,11 +4,11 @@ using System.Net.Http.Headers;
 namespace Latsos.Shared
 {
     /// <summary>
-    /// The HTTP response returned when a particular RequestRegistration is matched
+    /// The HTTP Response returned when a particular <see cref="RequestRegistration"></see> is matched
     /// </summary>
-    public class StubHttpResponse
+    public class HttpResponseModel
     {
-        public byte[] Contents { get; set; }
+        public string Contents { get; set; }
         public string ContentType { get; set; }
         public HttpStatusCode StatusCode { get; set; }
         public Headers Headers { get; set; }

@@ -1,9 +1,11 @@
 using System.Net.Http;
+using Latsos.Shared;
 
 namespace Latsos.Core
 {
     public interface IRequestEvaluator
     {
-        HttpResponseMessage FindRegisteredResponse(HttpRequestMessage request);
+      
+        HttpResponseModel FindRegisteredResponse(HttpRequestModel request);
     }
 }

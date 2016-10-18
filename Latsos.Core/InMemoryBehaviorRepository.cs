@@ -8,21 +8,21 @@ namespace Latsos.Core
 {
     public class InMemoryBehaviorRepository : IBehaviorRepository
     {
-        private readonly ConcurrentDictionary<HttpRequestRegistration, BehaviorRegistrationRequest> _registeredRequests =
-            new ConcurrentDictionary<HttpRequestRegistration, BehaviorRegistrationRequest>(new EqualityCompaper());
+        private readonly ConcurrentDictionary<RequestRegistration, BehaviorRegistrationRequest> _registeredRequests =
+            new ConcurrentDictionary<RequestRegistration, BehaviorRegistrationRequest>(new EqualityCompaper());
       
 
-        public void Add(BehaviorRegistrationRequest request)
+        public void Register(BehaviorRegistrationRequest request)
         {
             _registeredRequests.TryAdd(request.RequestRegistration, request);
         }
 
-        public StubHttpResponse Find(HttpRequestRegistration requestRegistration)
+        public HttpResponseModel Find(RequestRegistration requestRegistration)
         {
             
-            return _registeredRequests[requestRegistration]?.Response;
+            return _registeredRequests[requestRegistration]?.ResponseModel;
         }
-        public HttpRequestRegistration[] FindByLocalPath(string localPath)
+        public RequestRegistration[] FindByLocalPath(string localPath)
         {
           return  _registeredRequests.Keys.Where(k => k.LocalPath.Equals(localPath)).Select(s => s).ToArray();
 
@@ -38,24 +38,24 @@ namespace Latsos.Core
             return _registeredRequests.Values.ToArray();
         }
 
-        public StubHttpResponse Remove(HttpRequestRegistration requestRegistration)
+        public HttpResponseModel Unregister(RequestRegistration requestRegistration)
         {
             BehaviorRegistrationRequest outValue;
             _registeredRequests.TryRemove(requestRegistration, out outValue);
-            return outValue.Response;
+            return outValue.ResponseModel;
         }
     }
 
-    internal class EqualityCompaper : IEqualityComparer<HttpRequestRegistration>
+    internal class EqualityCompaper : IEqualityComparer<RequestRegistration>
     {
        
 
-        public bool Equals(HttpRequestRegistration x, HttpRequestRegistration y)
+        public bool Equals(RequestRegistration x, RequestRegistration y)
         {
             return x.Equals(y);
         }
 
-        public int GetHashCode(HttpRequestRegistration obj)
+        public int GetHashCode(RequestRegistration obj)
         {
            return  obj.GetHashCode();
         }

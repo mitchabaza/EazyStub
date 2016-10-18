@@ -1,9 +1,11 @@
 ﻿using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using FluentAssertions;
 using Latsos.Core;
+using Latsos.Shared;
 using Latsos.Web;
 using Moq;
 using NUnit.Framework;
@@ -12,10 +14,10 @@ using Ploeh.AutoFixture;
 namespace Latsos.Test.Server
 {
     [TestFixture]
-    public class MockRequestHandlerFixture : FixtureBase<MockRequestHandler>
+    public class StubRequestHandlerFixture : FixtureBase<StubRequestHandler>
     {
         [Test]
-        public void SendAsync_ShouldNotCallRouteMatcher_WhenRouteIsReal()
+        public void SendAsync_ShouldNotCallRouteMatcher_WhenRouteMatchesRealRoute()
         {
             HttpConfiguration configuration = Fixture.Freeze<HttpConfiguration>();
 
@@ -28,8 +30,10 @@ namespace Latsos.Test.Server
           
             var baseWasCalled = false;
             var matcher = Fixture.Freeze<Mock<IRequestEvaluator>>();
-            matcher.Setup(m => m.FindRegisteredResponse(It.IsAny<HttpRequestMessage>()))
-                .Returns((HttpResponseMessage) null);
+            matcher.Setup(m => m.FindRegisteredResponse(It.IsAny<HttpRequestModel>())).Returns((HttpResponseModel) null);
+            var transformer = Fixture.Freeze<Mock<IModelTransformer>>();
+            transformer.Setup(m => m.Transform(It.IsAny<HttpRequestMessage>())).Returns(Fixture.Create<HttpRequestModel>());
+
             var testHandler = new InnerHandler();
 
             Sut.InnerHandler = testHandler;
@@ -53,16 +57,28 @@ namespace Latsos.Test.Server
         [Test]
         public void SendAsync_ShouldReturnMockResponse_WhenRouteMatched()
         {
+            var responseModel = Fixture.Create<HttpResponseModel>();
             var response = Fixture.Create<HttpResponseMessage>();
+               
+            var requestModel = Fixture.Create<HttpRequestModel>();
             var matcher = Fixture.Freeze<Mock<IRequestEvaluator>>();
-            matcher.Setup(m => m.FindRegisteredResponse(It.IsAny<HttpRequestMessage>())).Returns(response);
+            var transformer=Fixture.Freeze<Mock<IModelTransformer>>();
+            transformer.Setup(m => m.Transform(It.IsAny<HttpRequestMessage>())).Returns(requestModel);
+            transformer.Setup(m => m.Transform(responseModel)).Returns(response);
+            matcher.Setup(m => m.FindRegisteredResponse(It.IsAny<HttpRequestModel>())).Returns(responseModel);
+
+            
+            var result= GetHttpClient().SendAsync(Fixture.Create<HttpRequestMessage>(), new CancellationToken()).Result;
+            result.Should().Be(response);
+        }
+
+        private HttpClient GetHttpClient()
+        {
             var testHandler = new InnerHandler();
 
             Sut.InnerHandler = testHandler;
-            
-            var client = new HttpClient(Sut);
-            var result=client.SendAsync(Fixture.Create<HttpRequestMessage>(), new CancellationToken()).Result;
-            result.Should().Be(response);
+
+            return new HttpClient(Sut);
         }
     }
 }

@@ -4,10 +4,10 @@ namespace Latsos.Core
 {
     public interface IBehaviorRepository
     {
-        void Add(BehaviorRegistrationRequest request);
-        StubHttpResponse Find(HttpRequestRegistration requestRegistration);
-        StubHttpResponse Remove(HttpRequestRegistration requestRegistration);
-        HttpRequestRegistration[] FindByLocalPath(string localPath);
+        void Register(BehaviorRegistrationRequest request);
+        HttpResponseModel Find(RequestRegistration requestRegistration);
+        HttpResponseModel Unregister(RequestRegistration requestRegistration);
+        RequestRegistration[] FindByLocalPath(string localPath);
         void RemoveAll();
         BehaviorRegistrationRequest [] GetAll();
     }

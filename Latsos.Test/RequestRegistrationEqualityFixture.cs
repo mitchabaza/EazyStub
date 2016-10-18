@@ -12,12 +12,14 @@ using Ploeh.AutoFixture.AutoMoq;
 namespace Latsos.Test
 {
     [TestFixture]
-    public class HttpRequestEqualityFixture
+    public class RequestRegistrationEqualityFixture
     {
         private readonly Fixture _fixture = new Fixture();
 
         private class Value : IEquatable<Value>
         {
+           
+
             public string Property { get; set; }
 
             public bool Equals(Value other)
@@ -43,8 +45,8 @@ namespace Latsos.Test
             bool headers1,   bool content1,  bool method1,  string path1, string path2, bool shoulBeEqual )
         {
 
-            var request1 = new HttpRequestRegistration();
-            var request2= new HttpRequestRegistration();
+            var request1 = new RequestRegistration();
+            var request2= new RequestRegistration();
 
             request1.Port = CreateMock<int>(port1);
             request2.Port = CreateMock<int>(port1);
@@ -55,11 +57,11 @@ namespace Latsos.Test
             request1.Headers= CreateMock<Headers>(headers1);
             request2.Headers = CreateMock<Headers>(headers1);
 
-            request1.Method = CreateMock<HttpMethod>(method1);
-            request2.Method = CreateMock<HttpMethod>(method1);
+            request1.Method = CreateMock<Method>(method1);
+            request2.Method = CreateMock<Method>(method1);
 
-            request1.Body = CreateMock<Body2>(content1);
-            request2.Body= CreateMock<Body2>(content1);
+            request1.Body = CreateMock<Body>(content1);
+            request2.Body= CreateMock<Body>(content1);
             
             request1.LocalPath = path1;
             request2.LocalPath = path2;
@@ -113,13 +115,13 @@ namespace Latsos.Test
         public void Method_Equals_ShouldWork()
         {
 
-            var method1 = HttpMethod.Delete;
-            var method2 = HttpMethod.Delete;
+            var method1 = Method.Delete;
+            var method2 = Method.Delete;
 
             method1.ShouldEqual(method2);
 
-             method1 = HttpMethod.Delete;
-            method2 = HttpMethod.Get;
+             method1 = Method.Delete;
+            method2 = Method.Get;
 
             method1.ShouldNotEqual(method2);
 
@@ -159,7 +161,7 @@ namespace Latsos.Test
             var matchRule2 = new MatchRule<Value>(true, null);
             matchRule2.ShouldEqual(matchRule1);
 
-            matchRule1 = new MatchRule<Value>(false, null);
+            matchRule1 = new MatchRule<Value>(false, new Value() { Property = "d" });
             matchRule2 = new MatchRule<Value>(true, null);
             matchRule2.ShouldNotEqual(matchRule1);
 
@@ -170,8 +172,8 @@ namespace Latsos.Test
         [TestCase("content", "application-java", "content", "application-html", false)]
         public void Contents_Equals_ShouldWork(string data1, string type1, string data2, string type2, bool equal )
         {
-           var contents1 = new Body() {Data =Encoding.ASCII.GetBytes(data1), Type = type1};
-           var contents2 = new Body() { Data = Encoding.ASCII.GetBytes(data2), Type = type2 };
+           var contents1 = new Body() {Data =data1, Type = type1};
+           var contents2 = new Body() { Data =  data2, Type = type2 };
 
             if (equal)
             {
@@ -187,18 +189,18 @@ namespace Latsos.Test
         public void Dictionary_ShouldUseEquals()
         {
             
-            var dictionary = new ConcurrentDictionary<HttpRequestRegistration, string>();
+            var dictionary = new ConcurrentDictionary<RequestRegistration, string>();
 
-            var httpRequest1 = _fixture.Create<HttpRequestRegistration>();
-            var httpRequest2 = _fixture.Create<HttpRequestRegistration>();
+            var httpRequest1 = _fixture.Create<RequestRegistration>();
+            var httpRequest2 = _fixture.Create<RequestRegistration>();
 
             dictionary.TryAdd(httpRequest1,"").Should().BeTrue();
             dictionary.TryAdd(httpRequest2,"").Should().BeTrue();
 
 
-            var dictionary2 = new ConcurrentDictionary<HttpRequestRegistration, string>();
+            var dictionary2 = new ConcurrentDictionary<RequestRegistration, string>();
 
-            var httpRequest3 = _fixture.Create<HttpRequestRegistration>();
+            var httpRequest3 = _fixture.Create<RequestRegistration>();
             var httpRequest4 = httpRequest3.Clone();
 
             dictionary2.TryAdd(httpRequest3, "").Should().BeTrue();

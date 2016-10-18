@@ -90,15 +90,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssertionExtensions.cs" />
+    <Compile Include="Server\ModelTransformerFixture.cs" />
+    <Compile Include="Server\RequestMatcherFixture.cs" />
+    <Compile Include="TestExtensions.cs" />
     <Compile Include="FixtureBase.cs" />
     <Compile Include="Client\RequestBuilderFixture.cs" />
-    <Compile Include="HttpRequestEqualityFixture.cs" />
-    <Compile Include="Server\MockRequestHandlerFixture.cs" />
+    <Compile Include="RequestRegistrationEqualityFixture.cs" />
+    <Compile Include="Server\StubRequestHandlerFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\InnerHandler.cs" />
-    <Compile Include="Server\RequestMatcherFixture.cs" />
-    <Compile Include="Shit.cs" />
+    <Compile Include="Server\RequestEvaluatorFixture.cs" />
+    <Compile Include="IntegrationTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -19,13 +19,13 @@ namespace Latsos.Web
         /// <returns></returns>
         public override async Task LogAsync(ExceptionLoggerContext context, CancellationToken cancellationToken)
         {
-            // Use a logger of your choice to log a RequestRegistration.
+            // Use a logger of your choice to log a Request
             var request = await CreateRequest(context.Request);
         }
 
-        private static async Task<HttpRequestModel> CreateRequest(HttpRequestMessage message)
+        private static async Task<Models.HttpRequestModel> CreateRequest(HttpRequestMessage message)
         {
-            var request = new HttpRequestModel
+            var request = new Models.HttpRequestModel
             {
                 Body = await message.Content.ReadAsStringAsync(),
                 Method = message.Method.Method,

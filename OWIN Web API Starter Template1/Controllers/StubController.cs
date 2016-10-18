@@ -14,22 +14,22 @@ namespace Latsos.Web.Controllers
             _repository = repository;
         }
         [HttpGet]
-        [Route("Stub/Peek")]
-        public IHttpActionResult Peek()
+        [Route("Stubs")]
+        public IHttpActionResult List()
         {
             return Ok(_repository.GetAll());
         }
-
+        
         [HttpPost]
-        [Route("Stub/Register")]
-        public IHttpActionResult Register(BehaviorRegistrationRequest request)
+        [Route("Stubs")]
+        public IHttpActionResult Add(BehaviorRegistrationRequest request)
         {
-            _repository.Add(request);
+            _repository.Register(request);
             return Ok();
         }
-        [HttpPost]
-        [Route("Stub/ClearAll")]
-        public IHttpActionResult ClearAll()
+        [HttpDelete]
+        [Route("Stubs")]
+        public IHttpActionResult Clear()
         {
             _repository.RemoveAll();
             return Ok();

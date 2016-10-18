@@ -22,13 +22,18 @@ namespace Latsos.Shared
         }
 
         public string Type { get; set; }
-        public byte[] Data { get; set; }
+        public string Data { get; set; }
        
         public bool Equals(Body other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return this.Data.SequenceEqual(other.Data) && this.Type.Equals(other.Type);
+            return this.Data.Equals(other.Data) && this.Type.Equals(other.Type);
+        }
+
+        public override string ToString()
+        {
+            return $"Type: {Type}, Data: {Data}";
         }
     }
 }

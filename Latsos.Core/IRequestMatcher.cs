@@ -4,6 +4,6 @@ namespace Latsos.Core
 {
     public interface IRequestMatcher
     {
-        HttpRequestRegistration Match(HttpRequestRegistration[] matchingRequests, HttpRequest requestMessage);
+        RequestRegistration Match(RequestRegistration[] matchingRequests, HttpRequestModel requestMessage);
     }
 }

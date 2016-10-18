@@ -7,13 +7,13 @@ namespace Latsos.Client
     public class RequestBuilder
     {
         private readonly MockBuilder _mockBuilder;
-        private readonly MatchRule<HttpMethod> _method = new MatchRule<HttpMethod>(true);
-        private readonly MatchRule<int> _port = new MatchRule<int>(true);
-        private readonly MatchRule<string> _queryStringMatch = new MatchRule<string>(true);
-        private readonly MatchRule<Body2> _content = new MatchRule<Body2>(true);
+        private readonly MatchRule<Method> _method = new MatchRule<Method>(true, null);
+        private readonly MatchRule<int> _port = new MatchRule<int>(true, 0);
+        private readonly MatchRule<string> _queryStringMatch = new MatchRule<string>(true, null);
+        private readonly MatchRule<Body> _content = new MatchRule<Body>(true, null);
         private readonly QueryString _queryString = new QueryString();
         private string _path;
-        private readonly MatchRule<Headers> _headers = new MatchRule<Headers>(true);
+        private readonly MatchRule<Headers> _headers = new MatchRule<Headers>(true, null);
 
         public RequestBuilder(MockBuilder mockBuilder)
         {
@@ -57,7 +57,7 @@ namespace Latsos.Client
             return this;
         }
 
-        public RequestBuilder Method(HttpMethod method)
+        public RequestBuilder Method(Method method)
         {
             Ensure.That(method).IsNotNull();
             _method.Any = false;
@@ -72,10 +72,10 @@ namespace Latsos.Client
             return this._mockBuilder.ResponseBuilder;
         }
 
-        public HttpRequestRegistration Build()
+        public RequestRegistration Build()
         {
             Ensure.That(_path,"LocalPath").IsNotNullOrWhiteSpace();
-            return new HttpRequestRegistration()
+            return new RequestRegistration()
             {
                 LocalPath = _path,           
                 Query = _queryStringMatch,

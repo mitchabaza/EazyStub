@@ -12,24 +12,27 @@ namespace Latsos.Web
     /// <summary>
     /// Intercepts all requests to the server and attemps to match them against requests that have been registered using <see cref="StubController"/>
     /// </summary>
-    public class MockRequestHandler : DelegatingHandler
+    public class StubRequestHandler : DelegatingHandler
     {
         private readonly IRequestEvaluator _evaluator;
+        private readonly IModelTransformer _transformer;
 
-        public MockRequestHandler(IRequestEvaluator evaluator)
+        public StubRequestHandler(IRequestEvaluator evaluator, IModelTransformer transformer)
         {
             _evaluator = evaluator;
+            _transformer = transformer;
         }
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-            var response = _evaluator.FindRegisteredResponse(request);
+
+            var response = _evaluator.FindRegisteredResponse(_transformer.Transform(request));
             if (response != null)
             {
                 var task = new TaskCompletionSource<HttpResponseMessage>();
 
-                task.SetResult(response);
+                task.SetResult(_transformer.Transform(response));
 
                 return task.Task;
             }

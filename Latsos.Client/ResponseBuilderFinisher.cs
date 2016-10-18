@@ -17,7 +17,7 @@ namespace Latsos.Client
             return new BehaviorRegistrationRequest()
             {
                 RequestRegistration = _inner.Builder.RequestBuilder.Build(),
-                Response = _inner.BuildResponse()
+                ResponseModel = _inner.BuildResponse()
             };
         }
     }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Latsos.Shared;
 using Newtonsoft.Json;
 using RestSharp;
+using Method = RestSharp.Method;
 
 namespace Latsos.Client
 {

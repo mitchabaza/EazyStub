@@ -1,10 +1,21 @@
 using System;
 using FluentAssertions.Execution;
+using Ploeh.AutoFixture;
+using Ploeh.AutoFixture.Dsl;
+using Ploeh.AutoFixture.Kernel;
 
 namespace Latsos.Test
 {
-    public static class AssertionExtensions
+    public static class TestExtensions
     {
+        public static T Freeze<T>(this IPostprocessComposer<T> composer, Fixture fixture)
+
+        {
+            var obj = ((ISpecimenBuilder)composer).Create<T>();
+            fixture.Inject<T>(obj);
+            return obj;
+        }
+
         /// <summary>
         /// Asserts objects equality using implementation of <see cref="System.IEquatable{T}"/>
         /// </summary>

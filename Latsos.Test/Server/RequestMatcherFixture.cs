@@ -1,85 +1,125 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Latsos.Core;
 using Latsos.Shared;
-using Moq;
 using NUnit.Framework;
 using Ploeh.AutoFixture;
 
 namespace Latsos.Test.Server
 {
-    public class RequestMatcherFixture : FixtureBase<RequestEvaluator>
+    public class RequestMatcherFixture : FixtureBase<RequestMatcher>
     {
-        protected override void OnFixtureSetup()
+        [Test]
+        public void Match_ShouldReturnNull_WhenAllAttributesRequireExactMatchAndThereAreNone()
         {
-            var configurationMock = Fixture.Freeze<Mock<IHostingEnvironment>>();
-            configurationMock.SetupGet(m => m.ApplicationVirtualPath).Returns("buzz");
+            var model = Fixture.Create<HttpRequestModel>();
+            var requestRegistration = Fixture.Create<RequestRegistration>();
+            requestRegistration.Port.Any = false;
+            requestRegistration.Method.Any = false;
+            requestRegistration.Body.Any = false;
+            requestRegistration.Headers.Any = false;
+            requestRegistration.Query.Any = false;
+
+            Sut.Match(new[] {requestRegistration}, model).Should().BeNull();
         }
-
-        //[Test]
-        //public void FindRegisteredResponse_ShouldReturnResponse_WhenRequestMatches()
-        //{
-        //    var repoMock = Fixture.Freeze<Stub<IBehaviorRepository>>();
-        //    var xformerMock = Fixture.Freeze<Stub<IModelTransformer>>();
-
-        //    var httpRequestMessage = Fixture.Freeze<HttpRequestMessage>();
-        //    var httpRequest = Fixture.Freeze<HttpRequestRegistration>();
-        //    var httpResponseMessage = Fixture.Freeze<HttpResponseMessage>();
-        //    var httpResponse = Fixture.Freeze<StubHttpResponse>();
-
-        //    xformerMock.Setup(m => m.Transform(httpRequestMessage)).Returns(httpRequest);
-        //    xformerMock.Setup(m => m.Transform(httpResponse)).Returns(httpResponseMessage);
-
-        //    repoMock.Setup(m => m.Find(httpRequest)).Returns(httpResponse);
-        //    Sut.FindRegisteredResponse(httpRequestMessage).Should().Be (httpResponseMessage);
-
-        //}
 
         [Test]
-        public void FindRegisteredResponse_ShouldReturnNull_WhenNoRequestsForLocalPath()
+        public void Match_ShouldReturnMatchingRequest_WhenAllAttributesAreAnyAndPathMatches()
         {
-            var repoMock = Fixture.Freeze<Mock<IBehaviorRepository>>();
-              var httpRequestMessage = Fixture.Freeze<HttpRequestMessage>();
-            
-           
-            repoMock.Setup(m => m.FindByLocalPath(httpRequestMessage.RequestUri.LocalPath)).Returns( (HttpRequestRegistration[]) null);
+            var model = Fixture.Create<HttpRequestModel>();
+            var requestRegistration = new RequestRegistration {LocalPath = model.LocalPath};
 
-            Sut.FindRegisteredResponse(httpRequestMessage).Should().BeNull();
+            Sut.Match(new[] {requestRegistration}, model).Should().Be(requestRegistration);
         }
         [Test]
-        public void FindRegisteredResponse_ShouldReturnNull_WhenNoRequestsForLocalPath1()
+        public void Match_ShouldReturnNull_WhenAllAttributesAreAnyButPathDoesntMatch()
         {
-            var repoMock = Fixture.Freeze<Mock<IBehaviorRepository>>();
-            
-            var httpRequestMessage = Fixture.Freeze<HttpRequestMessage>();
+            var model = Fixture.Create<HttpRequestModel>();
+            var requestRegistration = new RequestRegistration { LocalPath = model.LocalPath + "1" };
 
-
-            repoMock.Setup(m => m.FindByLocalPath(httpRequestMessage.RequestUri.LocalPath)).Returns(new HttpRequestRegistration[0]);
-
-            Sut.FindRegisteredResponse(httpRequestMessage).Should().BeNull();
+            Sut.Match(new[] { requestRegistration }, model).Should().Be(null);
         }
         [Test]
-        public void FindRegisteredResponse_ShouldCallMatcher_WhenRepositoryReturnsMultipleHits()
+        public void Match_ShouldReturnMatchingRequest_WhenMethodIsAnyAndAllOtherAttributesMatchExactly()
         {
-           
-            var repoMock = Fixture.Freeze<Mock<IBehaviorRepository>>();
-            var xformerMock = Fixture.Freeze<Mock<IModelTransformer>>();
-
-            var httpRequestMessage = Fixture.Freeze<HttpRequestMessage>();
-            var httpRequest = Fixture.Build<HttpRequestRegistration>().With(s=>s.LocalPath,httpRequestMessage.RequestUri.LocalPath).Create();
-            Fixture.Inject(httpRequest);
-            
-            var httpResponseMessage = Fixture.Freeze<HttpResponseMessage>();
-            var httpResponse = Fixture.Freeze<StubHttpResponse>();
-
-            xformerMock.Setup(m => m.Transform(httpResponse)).Returns(httpResponseMessage);
-             
-            repoMock.Setup(m => m.FindByLocalPath(It.IsAny<string>())).Returns(new[] {httpRequest});
-
-            repoMock.Setup(m => m.Remove(httpRequest)).Returns(httpResponse);
-
-            Sut.FindRegisteredResponse(httpRequestMessage).Should().Be(httpResponseMessage);
+            var model = Fixture.Create<HttpRequestModel>();
+            var requestRegistration = new RequestRegistration
+            {
+                LocalPath = model.LocalPath,
+                Method = {Any =true,Value = null},
+                Headers = { Any = false, Value = model.Headers},
+                Body = {Any=false,Value = model.Body},
+                Port = { Any = false, Value = model.Port},
+                Query = { Any = false, Value = model.Query}
+            };
+            Sut.Match(new[] { requestRegistration }, model).Should().Be(requestRegistration);
         }
-       
+
+        [Test]
+        public void Match_ShouldReturnMatchingRequest_WhenPortIsAnyAndAllOtherAttributesMatchExactly()
+        {
+            var model = Fixture.Create<HttpRequestModel>();
+            var requestRegistration = new RequestRegistration
+            {
+                LocalPath = model.LocalPath,
+                Port = { Any = true, Value = 0 },
+                Headers = { Any = false, Value = model.Headers },
+                Body = { Any = false, Value = model.Body },
+                Method = { Any = false, Value = model.Method },
+                Query = { Any = false, Value = model.Query }
+            };
+            Sut.Match(new[] { requestRegistration }, model).Should().Be(requestRegistration);
+        }
+        [Test]
+        public void Match_ShouldReturnMatchingRequest_WhenHeadersIsAnyAndAllOtherAttributesMatchExactly()
+        {
+            var model = Fixture.Create<HttpRequestModel>();
+            var requestRegistration = new RequestRegistration
+            {
+                LocalPath = model.LocalPath,
+                Headers = { Any = true, Value = null },
+                Port = { Any = false, Value = model.Port },
+                Body = { Any = false, Value = model.Body },
+                Method = { Any = false, Value = model.Method },
+                Query = { Any = false, Value = model.Query }
+            };
+            Sut.Match(new[] { requestRegistration }, model).Should().Be(requestRegistration);
+        }
+
+        [Test]
+        public void Match_ShouldReturnMatchingRequest_WhenBodyIsAnyAndAllOtherAttributesMatchExactly()
+        {
+            var model = Fixture.Create<HttpRequestModel>();
+            var requestRegistration = new RequestRegistration
+            {
+                LocalPath = model.LocalPath,
+                Body = { Any = true, Value = null },
+                Port = { Any = false, Value = model.Port },
+                Headers = { Any = false, Value = model.Headers },
+                Method = { Any = false, Value = model.Method },
+                Query = { Any = false, Value = model.Query }
+            };
+            Sut.Match(new[] { requestRegistration }, model).Should().Be(requestRegistration);
+        }
+
+        [Test]
+        public void Match_ShouldReturnMatchingRequest_WhenQueryIsAnyAndAllOtherAttributesMatchExactly()
+        {
+            var model = Fixture.Create<HttpRequestModel>();
+            var requestRegistration = new RequestRegistration
+            {
+                LocalPath = model.LocalPath,
+                Query = { Any = true, Value = null },
+                Port = { Any = false, Value = model.Port },
+                Headers = { Any = false, Value = model.Headers },
+                Method = { Any = false, Value = model.Method },
+                Body = { Any = false, Value = model.Body }
+            };
+            Sut.Match(new[] { requestRegistration }, model).Should().Be(requestRegistration);
+        }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System; 
 using FluentAssertions;
 using Latsos.Client;
 using Latsos.Shared;
@@ -22,12 +21,12 @@ namespace Latsos.Test.Client
                 .Build();
 
             registration.ShouldBeEquivalentTo(
-                new HttpRequestRegistration()
+                new RequestRegistration()
                 {
                     Headers = MatchRule<Headers>.Default,
                     Port = MatchRule<int>.Default,
                     LocalPath  = "/buzz/dance",
-                    Method= MatchRule<HttpMethod>.Default,
+                    Method= MatchRule<Method>.Default,
                     Query = new MatchRule<string>( $"?id={id}")
 
                 });
@@ -41,16 +40,16 @@ namespace Latsos.Test.Client
             var id = Guid.NewGuid().ToString();
             var registration = builder.Request()
                 .QueryString("id", id).QueryString("jack","jill")
-                .Path("etc/1").Method(HttpMethod.Post)
+                .Path("etc/1").Method(Method.Post)
                 .Build();
 
             registration.ShouldBeEquivalentTo(
-                new HttpRequestRegistration()
+                new RequestRegistration()
                 {
                     Headers = MatchRule<Headers>.Default,
                     Port = MatchRule<int>.Default,
                     LocalPath = "/etc/1",
-                    Method = new MatchRule<HttpMethod>( HttpMethod.Post),
+                    Method = new MatchRule<Method>( Method.Post),
                     Query = new MatchRule<string>( $"?id={id}&jack=jill")
 
                 });
@@ -63,17 +62,17 @@ namespace Latsos.Test.Client
             var id = Guid.NewGuid().ToString();
             var registration = builder.Request()
                 .QueryString("tranId", id).QueryString("orgId", "64556456456").QueryString("custid", "654654")
-                .Path("customer/delete/645564").Method(HttpMethod.Post)
+                .Path("customer/delete/645564").Method(Method.Post)
                 .Port(9999)
                 .Build();
 
             registration.ShouldBeEquivalentTo(
-                new HttpRequestRegistration()
+                new RequestRegistration()
                 {
                     Headers = MatchRule<Headers>.Default,
                     Port = new MatchRule<int>(9999),
                     LocalPath = "/customer/delete/645564",
-                    Method = new MatchRule<HttpMethod>( HttpMethod.Post),
+                    Method = new MatchRule<Method>( Method.Post),
                     Query = new MatchRule<string>( $"?tranId={id}&orgId=64556456456&custid=654654")
 
                 });

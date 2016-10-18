@@ -15,7 +15,7 @@ namespace Latsos.Web
         public static void Configure(HttpConfiguration configuration)
         {
             //configuration.Services.Replace(typeof(IExceptionHandler), new ApiExceptionHandler());
-            //configuration.Services.Add(typeof(IExceptionLogger), new ApiExceptionLogger());
+            //configuration.Services.Register(typeof(IExceptionLogger), new ApiExceptionLogger());
         }
     }
 }

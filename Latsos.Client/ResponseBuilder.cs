@@ -10,7 +10,7 @@ namespace Latsos.Client
     {
         public MockBuilder Builder { get; }
         private string _contentType;
-        private byte[] _contents;
+        private string _contents;
         private readonly Headers _headers = new Headers();
         private HttpStatusCode _statusCode;
 
@@ -36,7 +36,7 @@ namespace Latsos.Client
             _statusCode = (HttpStatusCode) code;
             return new ResponseBuilderFinisher(this);
         }
-        public ResponseBuilderFinisher Contents(byte[] contents)
+        public ResponseBuilderFinisher Contents(string contents)
         {
             Ensure.That(contents).IsNotNull();
             _contents = contents;
@@ -52,9 +52,9 @@ namespace Latsos.Client
             return new ResponseBuilderFinisher(this);
         }
 
-        protected internal StubHttpResponse BuildResponse()
+        protected internal HttpResponseModel BuildResponse()
         {
-            return new StubHttpResponse()
+            return new HttpResponseModel()
             {
                 ContentType = _contentType,
                 StatusCode = _statusCode,

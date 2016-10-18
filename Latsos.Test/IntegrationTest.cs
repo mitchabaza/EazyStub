@@ -2,23 +2,24 @@ using System;
 using System.Net;
 using System.Net.Http;
 using Latsos.Client;
+using Latsos.Shared;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace Latsos.Test
 {
     [TestFixture]
-    public class Shit
+    public class IntegrationTest
     {
         [Test]
-        public void Ana()
+        public void Simple()
         {
             var mock = new Stub();
             var json = new JsonSerializer();
             var builder = new MockBuilder();
             var buzz= builder.Request()
-                .Method(HttpMethod.Get)
-                .Path("cum/shit")
+                .Method(Method.Get)
+                .Path("test/method/1")
                 .Returns()
                 .StatusCode(HttpStatusCode.BadGateway)
                 .Build();

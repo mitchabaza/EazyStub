@@ -2,8 +2,8 @@
 {
     public class BehaviorRegistrationRequest
     {
-        public StubHttpResponse Response { get; set; }
-        public HttpRequestRegistration RequestRegistration { get; set; }
+        public HttpResponseModel ResponseModel { get; set; }
+        public RequestRegistration RequestRegistration { get; set; }
     }
 
     

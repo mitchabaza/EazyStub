@@ -11,20 +11,24 @@ namespace Latsos.Shared
         public MatchRule(T value)
         {
             Any = false;
+            if (Equals(value, default(T)))
+            {
+                throw new ArgumentOutOfRangeException("you must specify a non default value when Any is false", null as Exception);
+            }
             Value = value;
         }
 
         public MatchRule(bool any, T value)
         {
             Any = any;
+            if (any == false && Equals(value, default(T)))
+            {
+                throw new ArgumentOutOfRangeException("you must specify a non default value when Any is false",null as Exception);
+            }
             Value = value;
         }
 
-        public MatchRule(bool any)
-        {
-            Any = any;
-            Value = default(T);
-        }
+       
 
         public bool Any
         {
