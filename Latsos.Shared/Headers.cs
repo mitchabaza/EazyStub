@@ -2,21 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Latsos.Shared
 {
-    public class Headers : IEquatable<Headers> , IEnumerable<Headers.Header>
+    public class Headers : IEquatable<Headers>  
     {
-        public class Header
-        {
-            public Header(string key, string value)
-            {
-                Key = key;
-                Value = value;
-            }
 
-            public string Key { get; }
-            public string Value { get; }
+
+        public void Clear()
+        {
+            Dictionary.Clear();
         }
         public override bool Equals(object obj)
         {
@@ -28,17 +24,18 @@ namespace Latsos.Shared
 
         public override int GetHashCode()
         {
-            return Dictionary?.GetHashCode() ?? 0;
+            return Dictionary?.Select(k=>k.Key.GetHashCode()).Aggregate(1,(c,n)=>c*n) ?? 0;
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+
+
+        
+        public Dictionary<string, string> Dictionary { get; }
+
+        public Headers(Dictionary<string, string> dictionary)
         {
-            return GetEnumerator();
+            Dictionary = dictionary;
         }
-
-
-        internal Dictionary<string, string> Dictionary { get; }
-
 
         public Headers()
         {
@@ -65,12 +62,7 @@ namespace Latsos.Shared
             return DictionaryComparer.CheckEquality(this.Dictionary, other.Dictionary);
         }
 
-
-        public IEnumerator<Header> GetEnumerator()
-        {
-            return Dictionary.Select(s => new Header(s.Key, s.Value)).GetEnumerator();
-        }
-
+ 
         public override string ToString()
         {
             if (Dictionary.Count == 0)

@@ -66,7 +66,7 @@ namespace Latsos.Shared
         {
             unchecked
             {
-                return (_any.GetHashCode()*397) ^ EqualityComparer<T>.Default.GetHashCode(Value);
+                return (_any.GetHashCode()*397) ^ (Equals(Value,default(T))?0:Value.GetHashCode());
             }
         }
     }

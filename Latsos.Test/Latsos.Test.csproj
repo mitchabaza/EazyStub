@@ -90,6 +90,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Server\ModelTransformerFixture.cs" />
     <Compile Include="Server\RequestMatcherFixture.cs" />
     <Compile Include="TestExtensions.cs" />

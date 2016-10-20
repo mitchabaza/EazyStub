@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using FluentAssertions;
+using Latsos.Client;
 using Latsos.Shared;
 using Moq;
 using NUnit.Framework;
@@ -85,6 +87,27 @@ namespace Latsos.Test
             mock.Setup(s => s.Equals( It.IsAny<MatchRule<T>>())).Returns(returnVal);
 
             return mock.Object;
+        }
+
+        [Test]
+        public void Buzz()
+        {
+            var builder = new StubBuilder();
+            var behaviorRegistrationRequest = builder.Request()
+                .Method(Method.Get)
+                .Path("test/method/1")
+                .Header("buzz", "zz")
+                .Returns()
+                .StatusCode(HttpStatusCode.BadGateway)
+                .Build();
+            var behaviorRegistrationRequest2 = builder.Request()
+              .Method(Method.Get)
+              .Path("test/method/1")
+              .Header("buzz", "zz")
+              .Returns()
+              .StatusCode(HttpStatusCode.BadGateway)
+              .Build();
+            behaviorRegistrationRequest.Request.ShouldEqual(behaviorRegistrationRequest2.Request);
         }
         [Test]
         public void Header_Equals_ShouldWork()
@@ -172,8 +195,8 @@ namespace Latsos.Test
         [TestCase("content", "application-java", "content", "application-html", false)]
         public void Contents_Equals_ShouldWork(string data1, string type1, string data2, string type2, bool equal )
         {
-           var contents1 = new Body() {Data =data1, Type = type1};
-           var contents2 = new Body() { Data =  data2, Type = type2 };
+           var contents1 = new Body() {Data =data1, ContentType = type1};
+           var contents2 = new Body() { Data =  data2, ContentType = type2 };
 
             if (equal)
             {
@@ -201,12 +224,15 @@ namespace Latsos.Test
             var dictionary2 = new ConcurrentDictionary<RequestRegistration, string>();
 
             var httpRequest3 = _fixture.Create<RequestRegistration>();
-            var httpRequest4 = httpRequest3.Clone();
+            var httpRequest4 = httpRequest3.Copy();
 
+            
             dictionary2.TryAdd(httpRequest3, "").Should().BeTrue();
             dictionary2.TryAdd(httpRequest4, "").Should().BeFalse();
 
 
+
         }
+      
     }
 }

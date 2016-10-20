@@ -14,7 +14,7 @@ namespace Latsos.Web
     public class Startup
     {
         /// <summary>
-        /// Specifies how the ASP.NET application will respond to individual HTTP RequestRegistration.
+        /// Specifies how the ASP.NET application will respond to individual HTTP Request.
         /// </summary>
         /// <param name="app">Instance of <see cref="IAppBuilder"/>.</param>
         public void Configuration(IAppBuilder app)

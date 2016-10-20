@@ -2,25 +2,27 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using Latsos.Shared;
 
 namespace Latsos.Core
 {
     public class InMemoryBehaviorRepository : IBehaviorRepository
     {
-        private readonly ConcurrentDictionary<RequestRegistration, BehaviorRegistrationRequest> _registeredRequests =
-            new ConcurrentDictionary<RequestRegistration, BehaviorRegistrationRequest>(new EqualityCompaper());
+        private readonly ConcurrentDictionary<RequestRegistration, StubRegistration> _registeredRequests =
+            new ConcurrentDictionary<RequestRegistration, StubRegistration> (  );
       
 
-        public void Register(BehaviorRegistrationRequest request)
+        public void Register(StubRegistration request)
         {
-            _registeredRequests.TryAdd(request.RequestRegistration, request);
+
+            _registeredRequests.TryAdd(request.Request, request);
         }
 
         public HttpResponseModel Find(RequestRegistration requestRegistration)
         {
             
-            return _registeredRequests[requestRegistration]?.ResponseModel;
+            return _registeredRequests[requestRegistration]?.Response;
         }
         public RequestRegistration[] FindByLocalPath(string localPath)
         {
@@ -33,23 +35,21 @@ namespace Latsos.Core
             _registeredRequests.Clear();
         }
 
-        public BehaviorRegistrationRequest[] GetAll()
+        public StubRegistration[] GetAll()
         {
             return _registeredRequests.Values.ToArray();
         }
 
         public HttpResponseModel Unregister(RequestRegistration requestRegistration)
         {
-            BehaviorRegistrationRequest outValue;
+            StubRegistration outValue;
             _registeredRequests.TryRemove(requestRegistration, out outValue);
-            return outValue.ResponseModel;
+            return outValue.Response;
         }
     }
 
-    internal class EqualityCompaper : IEqualityComparer<RequestRegistration>
+    public class Comparer:IEqualityComparer<RequestRegistration>
     {
-       
-
         public bool Equals(RequestRegistration x, RequestRegistration y)
         {
             return x.Equals(y);
@@ -57,7 +57,7 @@ namespace Latsos.Core
 
         public int GetHashCode(RequestRegistration obj)
         {
-           return  obj.GetHashCode();
+            return obj.GetHashCode();
         }
     }
 }

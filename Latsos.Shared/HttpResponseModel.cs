@@ -8,9 +8,15 @@ namespace Latsos.Shared
     /// </summary>
     public class HttpResponseModel
     {
-        public string Contents { get; set; }
-        public string ContentType { get; set; }
+        public Body Body { get; set; }
         public HttpStatusCode StatusCode { get; set; }
         public Headers Headers { get; set; }
+
+        public HttpResponseModel()
+        {
+            Headers = new Headers();
+        }
+
+        
     }
 }

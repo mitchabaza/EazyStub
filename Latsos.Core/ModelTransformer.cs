@@ -8,8 +8,8 @@ namespace Latsos.Core
     {
         public HttpResponseMessage Transform(HttpResponseModel responseModel)
         {
-             var httpResponseMessage = new HttpResponseMessage(responseModel.StatusCode) {Content = new StringContent(responseModel.Contents,Encoding.Default,responseModel.ContentType)  };
-            foreach (var header in responseModel.Headers)
+             var httpResponseMessage = new HttpResponseMessage(responseModel.StatusCode) {Content = new StringContent(responseModel.Body.Data,Encoding.Default,responseModel.Body.ContentType)  };
+            foreach (var header in responseModel.Headers.Dictionary)
             {
                 httpResponseMessage.Headers.Add(header.Key, header.Value);
             }
@@ -21,7 +21,7 @@ namespace Latsos.Core
             var body = new Body()
             {
                 Data = request.Content.ReadAsStringAsync().Result,
-                Type = request.Content.Headers.ContentType.MediaType
+                ContentType = request.Content.Headers?.ContentType?.MediaType
             };
             var method = request.Method;
             var query = request.RequestUri.Query;

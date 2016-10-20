@@ -68,5 +68,10 @@ namespace Latsos.Shared
                 return hashCode;
             }
         }
+
+        public override string ToString()
+        {
+            return $"Port: {Port}, Body: {Body}, Headers: {Headers}, LocalPath: {LocalPath}, Query: {Query}, Method: {Method}";
+        }
     }
 }

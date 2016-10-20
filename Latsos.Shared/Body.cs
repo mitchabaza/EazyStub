@@ -17,23 +17,23 @@ namespace Latsos.Shared
         {
             unchecked
             {
-                return ((Type?.GetHashCode() ?? 0)*397) ^ (Data?.GetHashCode() ?? 0);
+                return ((ContentType?.GetHashCode() ?? 0)*397) ^ (Data?.GetHashCode() ?? 0);
             }
         }
 
-        public string Type { get; set; }
+        public string ContentType { get; set; }
         public string Data { get; set; }
        
         public bool Equals(Body other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return this.Data.Equals(other.Data) && this.Type.Equals(other.Type);
+            return this.Data.Equals(other.Data) && this.ContentType.Equals(other.ContentType);
         }
 
         public override string ToString()
         {
-            return $"Type: {Type}, Data: {Data}";
+            return $"Type: {ContentType}, Data: {Data}";
         }
     }
 }

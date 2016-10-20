@@ -6,12 +6,12 @@ using Latsos.Shared;
 
 namespace Latsos.Client
 {
-    public class MockBuilder
+    public class StubBuilder
     {
         internal RequestBuilder RequestBuilder { get; }
         internal ResponseBuilder ResponseBuilder { get; }
 
-        public MockBuilder()
+        public StubBuilder()
         {
             RequestBuilder= new RequestBuilder(this);
             ResponseBuilder = new ResponseBuilder(this);

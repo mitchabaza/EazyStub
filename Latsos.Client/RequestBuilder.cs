@@ -6,18 +6,18 @@ namespace Latsos.Client
 {
     public class RequestBuilder
     {
-        private readonly MockBuilder _mockBuilder;
-        private readonly MatchRule<Method> _method = new MatchRule<Method>(true, null);
-        private readonly MatchRule<int> _port = new MatchRule<int>(true, 0);
-        private readonly MatchRule<string> _queryStringMatch = new MatchRule<string>(true, null);
-        private readonly MatchRule<Body> _content = new MatchRule<Body>(true, null);
-        private readonly QueryString _queryString = new QueryString();
+        private readonly StubBuilder _stubBuilder;
+        private MatchRule<Method> _method = new MatchRule<Method>(true, null);
+        private MatchRule<int> _port = new MatchRule<int>(true, 0);
+        private MatchRule<string> _queryStringMatch = new MatchRule<string>(true, null);
+        private MatchRule<Body> _content = new MatchRule<Body>(true, null);
+        private QueryString _queryString = new QueryString();
         private string _path;
-        private readonly MatchRule<Headers> _headers = new MatchRule<Headers>(true, null);
+        private MatchRule<Headers> _headers = new MatchRule<Headers>(true, null);
 
-        public RequestBuilder(MockBuilder mockBuilder)
+        public RequestBuilder(StubBuilder stubBuilder)
         {
-            _mockBuilder = mockBuilder;
+            _stubBuilder = stubBuilder;
         }
 
 
@@ -41,7 +41,6 @@ namespace Latsos.Client
             else
             {
                 _path = path.Trim();
-
             }
 
             return this;
@@ -65,25 +64,47 @@ namespace Latsos.Client
             return this;
         }
 
-        
+        public RequestBuilder Header(string key, string value)
+        {
+            Ensure.That(key).IsNotNull();
+            Ensure.That(value).IsNotNull();
+            if (_headers.Value == null)
+            {
+                _headers.Value = new Headers();
+            }
+            _headers.Value.Add(key, value);
+            return this;
+        }
+
 
         public ResponseBuilder Returns()
         {
-            return this._mockBuilder.ResponseBuilder;
+            return this._stubBuilder.ResponseBuilder;
         }
 
         public RequestRegistration Build()
         {
-            Ensure.That(_path,"LocalPath").IsNotNullOrWhiteSpace();
+            Ensure.That(_path, "LocalPath").IsNotNullOrWhiteSpace();
             return new RequestRegistration()
             {
-                LocalPath = _path,           
+                LocalPath = _path,
                 Query = _queryStringMatch,
                 Headers = _headers,
                 Port = _port,
                 Method = _method,
-                Body= _content
+                Body = _content
             };
+        }
+
+        public void Clear()
+        {
+            _method = new MatchRule<Method>(true, null);
+            _port = new MatchRule<int>(true, 0);
+            _queryStringMatch = new MatchRule<string>(true, null);
+            _content = new MatchRule<Body>(true, null);
+            _queryString = new QueryString();
+            _path = "";
+            _headers = new MatchRule<Headers>(true, null);
         }
     }
 }

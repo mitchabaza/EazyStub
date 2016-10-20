@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using FluentAssertions.Execution;
 using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.Dsl;
@@ -6,8 +9,74 @@ using Ploeh.AutoFixture.Kernel;
 
 namespace Latsos.Test
 {
+
+
+    namespace System
+    {
+        public class ReferenceEqualityComparer : EqualityComparer<Object>
+        {
+            public override bool Equals(object x, object y)
+            {
+                return ReferenceEquals(x, y);
+            }
+            public override int GetHashCode(object obj)
+            {
+                if (obj == null) return 0;
+                return obj.GetHashCode();
+            }
+        }
+
+        namespace ArrayExtensions
+        {
+            public static class ArrayExtensions
+            {
+                public static void ForEach(this Array array, Action<Array, int[]> action)
+                {
+                    if (array.LongLength == 0) return;
+                    ArrayTraverse walker = new ArrayTraverse(array);
+                    do action(array, walker.Position);
+                    while (walker.Step());
+                }
+            }
+
+            internal class ArrayTraverse
+            {
+                public int[] Position;
+                private int[] maxLengths;
+
+                public ArrayTraverse(Array array)
+                {
+                    maxLengths = new int[array.Rank];
+                    for (int i = 0; i < array.Rank; ++i)
+                    {
+                        maxLengths[i] = array.GetLength(i) - 1;
+                    }
+                    Position = new int[array.Rank];
+                }
+
+                public bool Step()
+                {
+                    for (int i = 0; i < Position.Length; ++i)
+                    {
+                        if (Position[i] < maxLengths[i])
+                        {
+                            Position[i]++;
+                            for (int j = 0; j < i; j++)
+                            {
+                                Position[j] = 0;
+                            }
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+
+    }
     public static class TestExtensions
     {
+        
         public static T Freeze<T>(this IPostprocessComposer<T> composer, Fixture fixture)
 
         {
@@ -17,7 +86,7 @@ namespace Latsos.Test
         }
 
         /// <summary>
-        /// Asserts objects equality using implementation of <see cref="System.IEquatable{T}"/>
+        /// Asserts objects equality using implementation of <see cref="IEquatable{T}"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="object1"></param>
@@ -32,7 +101,7 @@ namespace Latsos.Test
         }
 
         /// <summary>
-        /// Asserts object inequality using implementation of <see cref="System.IEquatable{T}"/>
+        /// Asserts object inequality using implementation of <see cref="IEquatable{T}"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="object1"></param>

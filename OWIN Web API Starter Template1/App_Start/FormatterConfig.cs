@@ -16,8 +16,8 @@ namespace Latsos.Web
         {
             configuration.Formatters.Remove(configuration.Formatters.XmlFormatter);
 
-            configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver =
-                new CamelCasePropertyNamesContractResolver();
+            //configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver =
+            //    new CamelCasePropertyNamesContractResolver();
 
             configuration.Formatters.JsonFormatter.UseDataContractJsonSerializer = false;
         }

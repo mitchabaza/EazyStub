@@ -3,22 +3,26 @@ using Latsos.Shared;
 
 namespace Latsos.Client
 {
-    public class ResponseBuilderFinisher  
+    public class ResponseBuilderFinisher  : ResponseBuilder
     {
         private readonly ResponseBuilder _inner;
 
-        public ResponseBuilderFinisher(ResponseBuilder inner)
+        public ResponseBuilderFinisher(ResponseBuilder inner) : base(inner.Builder)
         {
             _inner = inner;
         }
 
-        public BehaviorRegistrationRequest Build()
+        public StubRegistration Build()
         {
-            return new BehaviorRegistrationRequest()
+            
+            var stubRegistration = new StubRegistration()
             {
-                RequestRegistration = _inner.Builder.RequestBuilder.Build(),
-                ResponseModel = _inner.BuildResponse()
+                Request = _inner.Builder.RequestBuilder.Build(),
+                Response = _inner.BuildResponse()
             };
+            _inner.Builder.RequestBuilder.Clear();
+            _inner.Builder.ResponseBuilder.Clear();
+            return stubRegistration ;
         }
     }
 }

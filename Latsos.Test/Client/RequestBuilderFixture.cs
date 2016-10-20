@@ -12,7 +12,7 @@ namespace Latsos.Test.Client
         [Test]
         public void RequestBuilder_ShouldCreateRequest_WhenQueryStringSpecified()
         {
-            var builder = new MockBuilder();
+            var builder = new StubBuilder();
 
             var id = Guid.NewGuid().ToString();
             var registration = builder.Request()
@@ -35,7 +35,7 @@ namespace Latsos.Test.Client
         [Test]
         public void RequestBuilder_ShouldCreateRequest_WhenQueryStringAndMethodSpecified()
         {
-            var builder = new MockBuilder();
+            var builder = new StubBuilder();
 
             var id = Guid.NewGuid().ToString();
             var registration = builder.Request()
@@ -57,7 +57,7 @@ namespace Latsos.Test.Client
         [Test]
         public void RequestBuilder_ShouldCreateRequest_WhenQueryStringAndMethodAndPortSpecified()
         {
-            var builder = new MockBuilder();
+            var builder = new StubBuilder();
 
             var id = Guid.NewGuid().ToString();
             var registration = builder.Request()
@@ -82,7 +82,7 @@ namespace Latsos.Test.Client
         [Test]
         public void RequestBuilder_ShouldThrow_WhenNoPathSpecified()
         {
-            var builder = new MockBuilder();
+            var builder = new StubBuilder();
 
             Action action=()=>builder.Request().Build();
             action.ShouldThrowExactly<ArgumentNullException>();

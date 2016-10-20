@@ -25,7 +25,7 @@ namespace Latsos.Test.Server
 
 
         //    repoMock.Setup(m => m.FindByLocalPath(httpRequestMessage.RequestUri.LocalPath))
-        //        .Returns((RequestRegistration[]) null);
+        //        .Returns((Request[]) null);
 
         //    Sut.FindRegisteredResponse(httpRequestMessage).Should().BeNull();
         //}
@@ -39,7 +39,7 @@ namespace Latsos.Test.Server
 
 
         //    repoMock.Setup(m => m.FindByLocalPath(httpRequestMessage.RequestUri.LocalPath))
-        //        .Returns(new RequestRegistration[0]);
+        //        .Returns(new Request[0]);
 
         //    Sut.FindRegisteredResponse(httpRequestMessage).Should().BeNull();
         //}
@@ -50,7 +50,7 @@ namespace Latsos.Test.Server
         //    var httpRequestMessage = Fixture.Freeze<HttpRequestMessage>();
         //    var httpRequstModel = Fixture.Freeze<HttpRequestModel>();
         //    var httpRequest =
-        //        Fixture.Build<RequestRegistration>()
+        //        Fixture.Build<Request>()
         //            .With(s => s.LocalPath, httpRequestMessage.RequestUri.LocalPath)
         //            .Freeze(Fixture);
 
@@ -61,7 +61,7 @@ namespace Latsos.Test.Server
         //    var matcher = Fixture.Freeze<Mock<IRequestMatcher>>();
         //    modelTransformer.Setup(m => m.Transform(httpRequestMessage)).Returns(httpRequstModel);
         //    matcher.Setup(m => m.Match(matchingRequests, httpRequstModel))
-        //        .Returns((RequestRegistration) null)
+        //        .Returns((Request) null)
         //        .Verifiable();
         //    behaviorRepo.Setup(m => m.FindByLocalPath(It.IsAny<string>())).Returns(matchingRequests);
 
@@ -75,7 +75,7 @@ namespace Latsos.Test.Server
         //    var httpRequestMessage = Fixture.Freeze<HttpRequestMessage>();
         //    var httpRequstModel = Fixture.Freeze<HttpRequestModel>();
         //    var requestRegistration =
-        //        Fixture.Build<RequestRegistration>()
+        //        Fixture.Build<Request>()
         //            .With(s => s.LocalPath, httpRequestMessage.RequestUri.LocalPath)
         //            .Freeze(Fixture);
 

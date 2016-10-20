@@ -22,9 +22,9 @@ namespace Latsos.Shared
         {
             return new Method(method.ToString());
         }
-        private Method(string method)
+        public Method(string verb)
         {
-            this._method = method;
+            this._method = verb;
         }
         public override int GetHashCode()
         {

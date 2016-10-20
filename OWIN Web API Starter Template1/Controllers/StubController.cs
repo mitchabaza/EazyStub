@@ -22,7 +22,7 @@ namespace Latsos.Web.Controllers
         
         [HttpPost]
         [Route("Stubs")]
-        public IHttpActionResult Add(BehaviorRegistrationRequest request)
+        public IHttpActionResult Add(StubRegistration request)
         {
             _repository.Register(request);
             return Ok();

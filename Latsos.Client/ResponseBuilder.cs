@@ -6,42 +6,46 @@ using Latsos.Shared;
 
 namespace Latsos.Client
 {
-    public class ResponseBuilder 
+    public class ResponseBuilder
     {
-        public MockBuilder Builder { get; }
+        public StubBuilder Builder { get; }
         private string _contentType;
-        private string _contents;
-        private readonly Headers _headers = new Headers();
-        private HttpStatusCode _statusCode;
+        private string _data;
+        private  Headers _headers = new Headers();
+        private HttpStatusCode _statusCode = HttpStatusCode.OK;
 
-        public ResponseBuilder(MockBuilder mockBuilder)
+        public ResponseBuilder(StubBuilder stubBuilder)
         {
-            Builder = mockBuilder;
+            Builder = stubBuilder;
         }
 
-        public ResponseBuilderFinisher ContentType(string contentType)
+        public ResponseBuilderFinisher Body(string content, string type)
         {
-            Ensure.That(contentType).IsNotEmpty();
-            _contentType = contentType;
+            // Ensure.That(content).IsNotEmpty();
+            _data = content;
+            _contentType = type;
+
             return new ResponseBuilderFinisher(this);
         }
 
         public ResponseBuilderFinisher StatusCode(HttpStatusCode code)
         {
-             _statusCode = code;
+            _statusCode = code;
             return new ResponseBuilderFinisher(this);
         }
+
         public ResponseBuilderFinisher StatusCode(int code)
         {
             _statusCode = (HttpStatusCode) code;
             return new ResponseBuilderFinisher(this);
         }
-        public ResponseBuilderFinisher Contents(string contents)
-        {
-            Ensure.That(contents).IsNotNull();
-            _contents = contents;
-            return new ResponseBuilderFinisher(this);
-        }
+
+        //public ResponseBuilderFinisher Contents(string contents)
+        //{
+        //    Ensure.That(contents).IsNotNull();
+        //    _data = contents;
+        //    return new ResponseBuilderFinisher(this);
+        //}
 
         public ResponseBuilderFinisher Header(string key, string value)
         {
@@ -56,13 +60,19 @@ namespace Latsos.Client
         {
             return new HttpResponseModel()
             {
-                ContentType = _contentType,
+                Body = new Body() {Data = _data, ContentType = _contentType},
                 StatusCode = _statusCode,
-                Contents = _contents,
                 Headers = _headers
             };
         }
 
-       
+
+        public void Clear()
+        {
+            _contentType = "";
+            _data = "";
+            _headers = new Headers();
+            _statusCode = HttpStatusCode.OK;
+        }
     }
 }

@@ -41,7 +41,7 @@ namespace Latsos.Core
         //    {
         //        return null;
         //    }
-        //    //we found a matching request , so return the mocked ResponseModel 
+        //    //we found a matching request , so return the mocked Response 
         //    return _modelTransformer.Transform(_repository.Unregister(matchingRequest));
         //}
 
@@ -61,7 +61,7 @@ namespace Latsos.Core
             {
                 return null;
             }
-            //we found a matching request , so return the mocked ResponseModel 
+            //we found a matching request , so return the mocked Response 
             return _repository.Unregister(matchingRequest);
         }
     }
