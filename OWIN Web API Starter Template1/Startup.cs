@@ -24,9 +24,9 @@ namespace Latsos.Web
 
             var configuration = new HttpConfiguration();
 
-            AutofacConfig.Configure(configuration);
+            AutofacConfig.Configure(app,configuration);
             app.UseAutofacMiddleware(AutofacConfig.Container);
-             configuration.MessageHandlers.Add( new ProxyDelegatingHandler());
+            configuration.MessageHandlers.Add( new ProxyDelegatingHandler());
             FormatterConfig.Configure(configuration);
             RouteConfig.Configure(configuration);
             ServiceConfig.Configure(configuration);

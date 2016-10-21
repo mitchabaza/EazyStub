@@ -6,6 +6,9 @@ using Autofac;
 using Autofac.Integration.WebApi;
 using Latsos.Core;
 using Latsos.Web.Controllers;
+using MB.Owin.Logging.Log4Net;
+using Microsoft.Owin.Logging;
+using Owin;
 
 namespace Latsos.Web
 {
@@ -24,9 +27,13 @@ namespace Latsos.Web
         /// Initializes and configures instance of <see cref="IContainer"/>.
         /// </summary>
         /// <param name="configuration"></param>
-        public static void Configure(HttpConfiguration configuration)
+        public static void Configure(IAppBuilder app, HttpConfiguration configuration)
         {
             var builder = new ContainerBuilder();
+            app.UseLog4Net("~/log4net.config");
+
+            var logger = app.CreateLogger<ILogger>();
+            builder.RegisterInstance(logger).As<ILogger>();
 
             // Other components can be registered here.
             builder.RegisterType<StubRequestHandler>().As<DelegatingHandler>().InstancePerRequest();

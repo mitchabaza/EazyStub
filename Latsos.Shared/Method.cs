@@ -7,6 +7,7 @@ namespace Latsos.Shared
     {
     
         private static readonly Method GetMethod = new Method("GET");
+       // private static readonly Method PatchMethod = new Method("PATCH");
         private static readonly Method PutMethod = new Method("PUT");
         private static readonly Method PostMethod = new Method("POST");
         private static readonly Method DeleteMethod = new Method("DELETE");
@@ -49,7 +50,7 @@ namespace Latsos.Shared
 
       
         public static Method Get => Method.GetMethod;
-        public static Method Put => Method.PutMethod;
+         public static Method Put => Method.PutMethod;
         public static Method Post => Method.PostMethod;
         public static Method Delete => Method.DeleteMethod;
         public static Method Trace => Method.TraceMethod;

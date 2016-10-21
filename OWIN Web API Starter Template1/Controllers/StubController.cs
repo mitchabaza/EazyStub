@@ -25,7 +25,7 @@ namespace Latsos.Web.Controllers
         public IHttpActionResult Add(StubRegistration request)
         {
             _repository.Register(request);
-            return Ok();
+            return Ok(new StubRegistrationResponse() {Identifier = Guid.NewGuid()});
         }
         [HttpDelete]
         [Route("Stubs")]

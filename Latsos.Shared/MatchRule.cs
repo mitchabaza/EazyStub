@@ -7,6 +7,7 @@ namespace Latsos.Shared
     public class MatchRule<T> : IEquatable<MatchRule<T>> where T :  IEquatable<T>
     {
         private bool _any;
+        private T _value;
 
         public MatchRule(T value)
         {
@@ -36,11 +37,23 @@ namespace Latsos.Shared
             set
             {
                 _any = value;
-                Value = default(T);
+                if (_any)
+                {
+                    Value = default(T);
+
+                }
             }
         }
 
-        public T Value { get; set; }
+        public T Value
+        {
+            get { return _value; }
+            set
+            {
+                _value = value;
+               
+            }
+        }
 
         public static MatchRule<T> Default = new MatchRule<T>(true, default(T));
 
@@ -68,6 +81,11 @@ namespace Latsos.Shared
             {
                 return (_any.GetHashCode()*397) ^ (Equals(Value,default(T))?0:Value.GetHashCode());
             }
+        }
+
+        public override string ToString()
+        {
+            return $"Any: {Any}, Value: {Value}";
         }
     }
 }

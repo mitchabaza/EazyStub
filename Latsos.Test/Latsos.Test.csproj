@@ -70,6 +70,10 @@
       <HintPath>..\packages\AutoFixture.Idioms.3.50.2\lib\net40\Ploeh.AutoFixture.Idioms.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net452\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -90,13 +94,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BodyFixture.cs" />
+    <Compile Include="Client\ResponseBuilderFixture.cs" />
+    <Compile Include="HeaderFixture.cs" />
+    <Compile Include="MethodFixture.cs" />
     <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="MatchRuleFixture.cs" />
+    <Compile Include="Server\LocalPathProcessorFixture.cs" />
     <Compile Include="Server\ModelTransformerFixture.cs" />
     <Compile Include="Server\RequestMatcherFixture.cs" />
+    <Compile Include="Client\RequestBuilderFixture.cs" />
     <Compile Include="TestExtensions.cs" />
     <Compile Include="FixtureBase.cs" />
-    <Compile Include="Client\RequestBuilderFixture.cs" />
-    <Compile Include="RequestRegistrationEqualityFixture.cs" />
+    <Compile Include="RequestRegistrationFixture.cs" />
     <Compile Include="Server\StubRequestHandlerFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\InnerHandler.cs" />

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Net.Mime;
 
 namespace Latsos.Shared
 {
@@ -21,9 +21,10 @@ namespace Latsos.Shared
             }
         }
 
-        public string ContentType { get; set; }
+        
+        public ContentType ContentType { get; set; }
         public string Data { get; set; }
-       
+      
         public bool Equals(Body other)
         {
             if (ReferenceEquals(null, other)) return false;

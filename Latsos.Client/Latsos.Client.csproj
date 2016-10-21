@@ -71,6 +71,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Latsos.Core\Latsos.Core.csproj">
+      <Project>{B4596AAF-A0D3-481A-A3C0-310C6B80B7B3}</Project>
+      <Name>Latsos.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Latsos.Shared\Latsos.Shared.csproj">
       <Project>{F0ACB08C-650B-4E32-83B1-FC14CE7BB516}</Project>
       <Name>Latsos.Shared</Name>

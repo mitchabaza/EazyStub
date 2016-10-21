@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Text;
 using EnsureThat;
 using Latsos.Shared;
 
@@ -7,13 +8,8 @@ namespace Latsos.Client
     public class RequestBuilder
     {
         private readonly StubBuilder _stubBuilder;
-        private MatchRule<Method> _method = new MatchRule<Method>(true, null);
-        private MatchRule<int> _port = new MatchRule<int>(true, 0);
-        private MatchRule<string> _queryStringMatch = new MatchRule<string>(true, null);
-        private MatchRule<Body> _content = new MatchRule<Body>(true, null);
-        private QueryString _queryString = new QueryString();
-        private string _path;
-        private MatchRule<Headers> _headers = new MatchRule<Headers>(true, null);
+
+        private RequestRegistration _registration = new RequestRegistration();
 
         public RequestBuilder(StubBuilder stubBuilder)
         {
@@ -25,9 +21,18 @@ namespace Latsos.Client
         {
             Ensure.That(key).IsNotEmpty();
             Ensure.That(value).IsNotEmpty();
-            _queryStringMatch.Any = false;
-            _queryString.Add(key, value);
-            _queryStringMatch.Value = _queryString.ToString();
+            _registration.Query.Any = false;
+
+            if (_registration.Query.Value != null)
+            {
+                _registration.Query.Value += "&";
+            }
+            else
+            {
+                _registration.Query.Value = "?";
+
+            }
+                _registration.Query.Value += $"{key}={value}";
             return this;
         }
 
@@ -36,13 +41,13 @@ namespace Latsos.Client
             Ensure.That(path).IsNotEmpty();
             if (path.Trim().Substring(0, 1) != "/")
             {
-                _path = "/" + path;
+                path = "/" + path;
             }
             else
             {
-                _path = path.Trim();
+                path = path.Trim();
             }
-
+            _registration.LocalPath = path;
             return this;
         }
 
@@ -50,8 +55,8 @@ namespace Latsos.Client
         public RequestBuilder Port(int port)
         {
             Ensure.That(port).IsInRange(0, 65535);
-            _port.Any = false;
-            _port.Value = port;
+            _registration.Port.Any = false;
+            _registration.Port.Value = port;
 
             return this;
         }
@@ -59,8 +64,8 @@ namespace Latsos.Client
         public RequestBuilder Method(Method method)
         {
             Ensure.That(method).IsNotNull();
-            _method.Any = false;
-            _method.Value = method;
+            _registration.Method.Any = false;
+            _registration.Method.Value = method;
             return this;
         }
 
@@ -68,11 +73,12 @@ namespace Latsos.Client
         {
             Ensure.That(key).IsNotNull();
             Ensure.That(value).IsNotNull();
-            if (_headers.Value == null)
+            _registration.Headers.Any = false;
+            if (_registration.Headers.Value == null)
             {
-                _headers.Value = new Headers();
+                _registration.Headers.Value = new Headers();
             }
-            _headers.Value.Add(key, value);
+            _registration.Headers.Value.Add(key, value);
             return this;
         }
 
@@ -84,27 +90,39 @@ namespace Latsos.Client
 
         public RequestRegistration Build()
         {
-            Ensure.That(_path, "LocalPath").IsNotNullOrWhiteSpace();
-            return new RequestRegistration()
-            {
-                LocalPath = _path,
-                Query = _queryStringMatch,
-                Headers = _headers,
-                Port = _port,
-                Method = _method,
-                Body = _content
-            };
+           
+            var reg = _registration;
+            Clear();
+            return reg;
         }
 
-        public void Clear()
+        internal void Clear()
         {
-            _method = new MatchRule<Method>(true, null);
-            _port = new MatchRule<int>(true, 0);
-            _queryStringMatch = new MatchRule<string>(true, null);
-            _content = new MatchRule<Body>(true, null);
-            _queryString = new QueryString();
-            _path = "";
-            _headers = new MatchRule<Headers>(true, null);
+            //_method = new MatchRule<Method>(true, null);
+            //_port = new MatchRule<int>(true, 0);
+            //_queryStringMatch = new MatchRule<string>(true, null);
+            //_body = new MatchRule<Body>(true, null);
+            //_queryString = new QueryString();
+            //_path = "";
+            //_headers = new MatchRule<Headers>(true, null);
+            _registration = new RequestRegistration();
+        }
+
+        public RequestBuilder Body(string data, string mediaType, Encoding charset)
+        {
+            _registration.Body.Any = false;
+            _registration.Body.Value = new Body()
+            {
+                ContentType = new ContentType() {CharSet = charset, MediaType = mediaType}
+            };
+            return this;
+        }
+
+        public RequestBuilder Body(string data, string mediaType)
+        {
+            _registration.Body.Any = false;
+            _registration.Body.Value = new Body() {Data = data, ContentType = new ContentType() {MediaType = mediaType}};
+            return this;
         }
     }
 }

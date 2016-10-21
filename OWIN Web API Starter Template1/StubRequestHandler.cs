@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Http.Routing;
 using Latsos.Core;
 using Latsos.Web.Controllers;
+using Microsoft.Owin.Logging;
 
 namespace Latsos.Web
 {
@@ -16,17 +17,20 @@ namespace Latsos.Web
     {
         private readonly IRequestEvaluator _evaluator;
         private readonly IModelTransformer _transformer;
+        private readonly ILogger _logger;
 
-        public StubRequestHandler(IRequestEvaluator evaluator, IModelTransformer transformer)
+        public StubRequestHandler(IRequestEvaluator evaluator, IModelTransformer transformer, ILogger logger)
         {
             _evaluator = evaluator;
             _transformer = transformer;
+            _logger = logger;
         }
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
 
+            _logger.WriteInformation(_transformer.Transform(request).ToString());
             var response = _evaluator.FindRegisteredResponse(_transformer.Transform(request));
             if (response != null)
             {

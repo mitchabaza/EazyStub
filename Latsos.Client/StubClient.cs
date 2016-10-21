@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Latsos.Core;
 using Latsos.Shared;
 using Newtonsoft.Json;
 using RestSharp;
@@ -15,7 +16,6 @@ namespace Latsos.Client
     public class StubClient
     {
        
-
         private readonly RestClient _client;
         const string StubsResource = "Stubs";
 
@@ -38,6 +38,44 @@ namespace Latsos.Client
             var request = new RestRequestEx(StubsResource, Method.POST);
             request.AddJsonBody(stubRegistration);
             Execute(request);
+        }
+        public IRestResponse Send(RequestRegistration requestRegistration)
+        {
+            
+            var request = new RestRequestEx(requestRegistration.LocalPath, ConvertMethod(requestRegistration.Method.Value));
+            if (requestRegistration.Headers?.Value != null)
+                foreach (var header in requestRegistration.Headers.Value.Dictionary)
+                {
+                    request.AddHeader(header.Key, header.Value);
+                }
+            request.RequestFormat= DataFormat.Json;
+            request.AddBody(requestRegistration.Body);
+            return Execute(request);
+        }
+
+        private Method ConvertMethod( Shared.Method method)
+        {
+            if (method.Equals(Shared.Method.Delete))
+            {
+                return RestSharp.Method.DELETE;
+            }
+            if (method.Equals(Shared.Method.Post))
+            {
+                return RestSharp.Method.POST;
+            }
+            if (method.Equals(Shared.Method.Get))
+            {
+                return RestSharp.Method.GET;
+            }
+            if (method.Equals(Shared.Method.Options))
+            {
+                return RestSharp.Method.OPTIONS;
+            }
+            if (method.Equals(Shared.Method.Put))
+            {
+                return RestSharp.Method.PUT;
+            }
+            throw new ArgumentException();
         }
 
         public StubRegistration[] List()

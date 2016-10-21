@@ -8,6 +8,7 @@ namespace Latsos.Shared
     /// </summary>
     public class HttpResponseModel
     {
+ 
         public Body Body { get; set; }
         public HttpStatusCode StatusCode { get; set; }
         public Headers Headers { get; set; }
@@ -15,6 +16,7 @@ namespace Latsos.Shared
         public HttpResponseModel()
         {
             Headers = new Headers();
+            Body=new Body();
         }
 
         

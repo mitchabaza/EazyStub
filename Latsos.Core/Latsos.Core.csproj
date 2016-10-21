@@ -42,7 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IHostingEnvironment.cs" />
+    <Compile Include="IRequestModelProcessor.cs" />
     <Compile Include="IRequestMatcher.cs" />
+    <Compile Include="RequestMessageProcessor.cs" />
     <Compile Include="ModelTransformer.cs" />
     <Compile Include="IBehaviorRepository.cs" />
     <Compile Include="InMemoryBehaviorRepository.cs" />

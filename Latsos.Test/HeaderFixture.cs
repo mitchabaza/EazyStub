@@ -1,0 +1,51 @@
+using System;
+using FluentAssertions;
+using Latsos.Shared;
+using NUnit.Framework;
+
+namespace Latsos.Test
+{
+    [TestFixture]
+    public class HeaderFixture
+    {
+        [Test]
+        public void Equals_ShouldReturnTrue_WhenKeyAndValueSame()
+        {
+            var headers1 = new Headers();
+            headers1.Add("id", "b");
+            var headers2 = new Headers();
+            headers2.Add("id", "b");
+            headers2.ShouldEqual(headers1);
+            headers2.GetHashCode().Should().Be(headers1.GetHashCode());
+        }
+
+        [Test]
+        public void Equals_ShouldReturnFalse_WhenKeySameButValueDifferent()
+        {
+            var headers1 = new Headers();
+            headers1.Add("id", "b");
+            var headers2 = new Headers();
+            headers1 = new Headers();
+            headers1.Add("id", "x");
+
+            headers2.ShouldNotEqual(headers1);
+            headers2.GetHashCode().Should().NotBe(headers1.GetHashCode());
+        }
+
+        [Test]
+        public void Add_ShouldThrow_WhenValueIsNull()
+        {
+            var headers1 = new Headers();
+            Action method = () => headers1.Add("id", null);
+            method.ShouldThrow<ArgumentNullException>();
+        }
+
+        [Test]
+        public void Add_ShouldThrow_WhenKeyIsNull()
+        {
+            var headers1 = new Headers();
+            Action method = () => headers1.Add(null, "");
+            method.ShouldThrow<ArgumentNullException>();
+        }
+    }
+}

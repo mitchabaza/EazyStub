@@ -1,12 +1,13 @@
-﻿using System; 
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using FluentAssertions;
 using Latsos.Client;
 using Latsos.Shared;
 using NUnit.Framework;
 
-namespace Latsos.Test.Client
+namespace Latsos.Test
 {
-    [TestFixture]
     public class RequestBuilderFixture
     {
         [Test]
@@ -25,9 +26,9 @@ namespace Latsos.Test.Client
                 {
                     Headers = MatchRule<Headers>.Default,
                     Port = MatchRule<int>.Default,
-                    LocalPath  = "/buzz/dance",
-                    Method= MatchRule<Method>.Default,
-                    Query = new MatchRule<string>( $"?id={id}")
+                    LocalPath = "/buzz/dance",
+                    Method = MatchRule<Method>.Default,
+                    Query = new MatchRule<string>($"?id={id}")
 
                 });
         }
@@ -39,7 +40,7 @@ namespace Latsos.Test.Client
 
             var id = Guid.NewGuid().ToString();
             var registration = builder.Request()
-                .QueryString("id", id).QueryString("jack","jill")
+                .QueryString("id", id).QueryString("jack", "jill")
                 .Path("etc/1").Method(Method.Post)
                 .Build();
 
@@ -49,8 +50,8 @@ namespace Latsos.Test.Client
                     Headers = MatchRule<Headers>.Default,
                     Port = MatchRule<int>.Default,
                     LocalPath = "/etc/1",
-                    Method = new MatchRule<Method>( Method.Post),
-                    Query = new MatchRule<string>( $"?id={id}&jack=jill")
+                    Method = new MatchRule<Method>(Method.Post),
+                    Query = new MatchRule<string>($"?id={id}&jack=jill")
 
                 });
         }
@@ -72,20 +73,60 @@ namespace Latsos.Test.Client
                     Headers = MatchRule<Headers>.Default,
                     Port = new MatchRule<int>(9999),
                     LocalPath = "/customer/delete/645564",
-                    Method = new MatchRule<Method>( Method.Post),
-                    Query = new MatchRule<string>( $"?tranId={id}&orgId=64556456456&custid=654654")
+                    Method = new MatchRule<Method>(Method.Post),
+                    Query = new MatchRule<string>($"?tranId={id}&orgId=64556456456&custid=654654")
 
                 });
         }
 
 
-        [Test]
-        public void RequestBuilder_ShouldThrow_WhenNoPathSpecified()
+        [Test] public void Build_ShouldResetInternalState()
         {
-            var builder = new StubBuilder();
+            var builder = new RequestBuilder(new StubBuilder());
+            var request = builder
+                .Method(Method.Get)
+                .Path("test/method/1")
+                .QueryString("customerId", "153").QueryString("orderId", "1314")
+                .Body("<Html/>", "text/html")
+                .Header("X-Powered-By", "IIS")
+                .Port(443)
+                .Build();
 
-            Action action=()=>builder.Request().Build();
-            action.ShouldThrowExactly<ArgumentNullException>();
+            var request2 = builder.Build();
+
+            request2.ShouldEqual(new RequestRegistration());
         }
+
+
+        [Test]
+        public void Build_ShouldPopulateAllProperties()
+        {
+            var builder = new RequestBuilder(new StubBuilder());
+            var request = builder
+                .Method(Method.Get)
+                .Path("test/method/1")
+                .QueryString("customerId", "153").QueryString("orderId","1314")
+                .Body("<Html/>", "text/html")
+                .Header("X-Powered-By", "IIS")
+                .Port(443)
+                .Build();
+
+            var expectedRequest = new RequestRegistration
+            {
+                Query = {Any=false, Value = "?customerId=153&orderId=1314" },
+                Method = { Any = false, Value = Method.Get},
+                Port = { Any = false, Value = 443},
+                LocalPath = "/test/method/1",
+                Body =
+                {
+                    Any=false,Value = new Body() {Data = "<Html/>", ContentType = new ContentType() {MediaType = "text/html"}}
+                },
+                Headers = { Any = false, Value = new Headers(new Dictionary<string, string>() {{"X-Powered-By", "IIS"}})}
+            };
+            request.ShouldEqual(expectedRequest);
+
+        }
+
+
     }
 }

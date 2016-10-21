@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Latsos.Test.System;
 using Latsos.Test.System.ArrayExtensions;
+using Newtonsoft.Json;
 
 namespace Latsos.Test
 {
@@ -63,6 +64,11 @@ namespace Latsos.Test
                 var clonedFieldValue = InternalCopy(originalFieldValue, visited);
                 fieldInfo.SetValue(cloneObject, clonedFieldValue);
             }
+        }
+
+        public static string ToJson(this object obj)
+        {
+            return JsonConvert.SerializeObject(obj);
         }
         public static T Copy<T>(this T original)
         {

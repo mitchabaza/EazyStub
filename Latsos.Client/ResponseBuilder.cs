@@ -21,7 +21,7 @@ namespace Latsos.Client
 
         public ResponseBuilderFinisher Body(string content, string type)
         {
-            // Ensure.That(content).IsNotEmpty();
+            
             _data = content;
             _contentType = type;
 
@@ -40,12 +40,7 @@ namespace Latsos.Client
             return new ResponseBuilderFinisher(this);
         }
 
-        //public ResponseBuilderFinisher Contents(string contents)
-        //{
-        //    Ensure.That(contents).IsNotNull();
-        //    _data = contents;
-        //    return new ResponseBuilderFinisher(this);
-        //}
+      
 
         public ResponseBuilderFinisher Header(string key, string value)
         {
@@ -60,7 +55,7 @@ namespace Latsos.Client
         {
             return new HttpResponseModel()
             {
-                Body = new Body() {Data = _data, ContentType = _contentType},
+                Body = new Body() {Data = _data, ContentType = new ContentType() {MediaType = _contentType } },
                 StatusCode = _statusCode,
                 Headers = _headers
             };

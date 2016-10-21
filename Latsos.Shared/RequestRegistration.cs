@@ -5,7 +5,8 @@ namespace Latsos.Shared
 {
     public class RequestRegistration : IEquatable<RequestRegistration>
     {
-       
+        private MatchRule<string> _query;
+
         public RequestRegistration()
         {
             Port = new MatchRule<int>(true,default(int));
@@ -20,7 +21,16 @@ namespace Latsos.Shared
         public MatchRule<Body> Body { get; set; }
         public MatchRule<Headers> Headers { get; set; }
         public string LocalPath { get; set; }
-        public MatchRule<string> Query { get; set; }
+
+        public MatchRule<string> Query
+        {
+            get { return _query; }
+            set
+            {
+                _query = value;
+            }
+        }
+
         public MatchRule<Method> Method { get; set; }
 
         public bool Equals(RequestRegistration other)

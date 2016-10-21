@@ -6,9 +6,23 @@ namespace Latsos.Core
 {
     public class ModelTransformer : IModelTransformer
     {
+        private readonly IRequestModelProcessor _processor;
+
+        public ModelTransformer(IRequestModelProcessor processor)
+        {
+            _processor = processor;
+        }
+
         public HttpResponseMessage Transform(HttpResponseModel responseModel)
         {
-             var httpResponseMessage = new HttpResponseMessage(responseModel.StatusCode) {Content = new StringContent(responseModel.Body.Data,Encoding.Default,responseModel.Body.ContentType)  };
+            var httpResponseMessage = new HttpResponseMessage(responseModel.StatusCode);
+            if (responseModel.Body.Data != null)
+            {
+                httpResponseMessage.Content = new StringContent(responseModel.Body.Data, responseModel.Body.ContentType.CharSet,
+                    responseModel.Body.ContentType.MediaType);
+
+            }
+
             foreach (var header in responseModel.Headers.Dictionary)
             {
                 httpResponseMessage.Headers.Add(header.Key, header.Value);
@@ -18,11 +32,15 @@ namespace Latsos.Core
 
         public HttpRequestModel Transform(HttpRequestMessage request)
         {
-            var body = new Body()
+         var body = new Body()
             {
                 Data = request.Content.ReadAsStringAsync().Result,
-                ContentType = request.Content.Headers?.ContentType?.MediaType
+                ContentType = new ContentType() {MediaType = request.Content.Headers?.ContentType?.MediaType}
             };
+            if (request.Content?.Headers?.ContentType?.CharSet!=null)
+            {
+                body.ContentType.CharSet = Encoding.GetEncoding(request.Content.Headers.ContentType.CharSet);
+            }
             var method = request.Method;
             var query = request.RequestUri.Query;
             var port = request.RequestUri.Port;
@@ -32,7 +50,9 @@ namespace Latsos.Core
                 headers.Add(httpRequestHeader.Key, string.Join(",", httpRequestHeader.Value));
             }
             var localPath = request.RequestUri.LocalPath;
-            return new HttpRequestModel(body, method, headers, query, localPath, port);
+            var requestModel = new HttpRequestModel(body, method, headers, query, localPath, port);
+            _processor.Execute(requestModel);
+            return requestModel;
         }
     }
 }

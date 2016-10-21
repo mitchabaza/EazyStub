@@ -2,18 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using EnsureThat;
 using Newtonsoft.Json;
 
 namespace Latsos.Shared
 {
-    public class Headers : IEquatable<Headers>  
+    public class Headers : IEquatable<Headers>
     {
-
-
         public void Clear()
         {
             Dictionary.Clear();
         }
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -24,12 +24,10 @@ namespace Latsos.Shared
 
         public override int GetHashCode()
         {
-            return Dictionary?.Select(k=>k.Key.GetHashCode()).Aggregate(1,(c,n)=>c*n) ?? 0;
+            return Dictionary?.Select(k => k.Key.GetHashCode() ^ k.Value.GetHashCode()).Aggregate(1, (c, n) => c*n) ?? 0;
         }
 
 
-
-        
         public Dictionary<string, string> Dictionary { get; }
 
         public Headers(Dictionary<string, string> dictionary)
@@ -44,9 +42,12 @@ namespace Latsos.Shared
 
         public void Add(string key, string value)
         {
+            Ensure.That(key).IsNotNullOrEmpty();
+            Ensure.That(value).IsNotNullOrEmpty();
+
             if (Dictionary.ContainsKey(key))
             {
-                Dictionary[key]+=","+value;
+                Dictionary[key] += "," + value;
             }
             else
             {
@@ -62,14 +63,16 @@ namespace Latsos.Shared
             return DictionaryComparer.CheckEquality(this.Dictionary, other.Dictionary);
         }
 
- 
+
         public override string ToString()
         {
             if (Dictionary.Count == 0)
             {
                 return string.Empty;
             }
-            return Dictionary.Select(kvp => $"key: {kvp.Key} value:{kvp.Value}") .Aggregate((curr, next)=> curr + "," + next);
+            return
+                Dictionary.Select(kvp => $"key: {kvp.Key} value:{kvp.Value}")
+                    .Aggregate((curr, next) => curr + "," + next);
         }
     }
 }

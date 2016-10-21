@@ -10,46 +10,128 @@ using Latsos.Core;
 using Latsos.Shared;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using Ploeh.AutoFixture;
 
 namespace Latsos.Test.Server
 {
-    public class ModelTransformerFixture:FixtureBase<ModelTransformer>
+    public class ModelTransformerFixture : FixtureBase<ModelTransformer>
     {
         [Test]
-        public void TransformRequest_Should_Work()
+        public void TransformRequest_ShouldInvokePostProcessorBeforeReturning()
+
+        {
+            var request = Fixture.Build<HttpRequestMessage>()
+                .Create();
+            Fixture.Freeze<Mock<IRequestModelProcessor>>()
+                .Setup(s => s.Execute(It.IsAny<HttpRequestModel>()))
+                .Callback<HttpRequestModel>(r => r.LocalPath = "hi mom");
+            Sut.Transform(request
+                ).LocalPath.Should().Be("hi mom");
+        }
+
+
+        [Test]
+        public void TransformRequest_ShouldReturnAllAttributes()
+        {
+            var request = Fixture.Create<HttpRequestMessage>();
+            var httpRequestModel = TransformModel(request);
+            Sut.Transform(request).ShouldBeEquivalentTo(httpRequestModel);
+        }
+
+        private HttpRequestModel TransformModel(HttpRequestMessage request)
         {
             var content = new StringContent(Fixture.Create<string>());
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            var request = Fixture.Build<HttpRequestMessage>().With(s=>s.Content, content).Create();
+            request.Content = content;
             request.Headers.Add("Accept-Encoding", "gzip, deflate");
             request.Headers.Add("Forwarded", "for=192.0.2.43, for=198.51.100.17");
-            var body = new Body() {Data=request.Content.ReadAsStringAsync().Result, ContentType = request.Content.Headers.ContentType.MediaType};
+
+            var body = new Body()
+            {
+                Data = request.Content.ReadAsStringAsync().Result,
+                ContentType = new ContentType()
+                {
+                    MediaType = content.Headers.ContentType.MediaType,
+                    CharSet =
+                        content.Headers?.ContentType.CharSet != null
+                            ? Encoding.GetEncoding(content.Headers?.ContentType?.CharSet)
+                            : null
+                }
+            };
             var method = request.Method;
             var query = request.RequestUri.Query;
             var port = request.RequestUri.Port;
             var headers = new Headers();
             request.Headers.ForEach(h => headers.Add(h.Key, string.Join(",", h.Value)));
             string localPath = request.RequestUri.LocalPath;
-            var httpRequestModel = new HttpRequestModel(body,method,headers,query,localPath, port);
-
-            Sut.Transform(request).ShouldBeEquivalentTo(httpRequestModel);
+            return new HttpRequestModel(body, method, headers, query, localPath, port);
         }
 
         [Test]
-        public void TransformResponse_Should_Work()
+        public void TransformResponse_ShouldReturnCorrectResponse_WhenAllAttributesPresent()
         {
-            var content = new StringContent(Fixture.Create<string>(), Encoding.Default,"application/xml");
-         
-            var httpResponseModel = Fixture.Build<HttpResponseModel>().With(m=>m.Body, new Body() {Data="",ContentType = "application/xml" }) .Create();
+            var httpResponseModel =
+                Fixture.Build<HttpResponseModel>()
+                    .With(m => m.Body,
+                        new Body()
+                        {
+                            Data = "",
+                            ContentType = new ContentType() {MediaType = "application/xml", CharSet = null}
+                        })
+                    .Create();
             httpResponseModel.Headers.Add("Accept-Encoding", "gzip, deflate");
             httpResponseModel.Headers.Add("Forwarded", "for=192.0.2.43, for=198.51.100.17");
+
+            var httpResponseMessage = GetExpectedResponse(httpResponseModel);
+
+            Sut.Transform(httpResponseModel).ShouldBeEquivalentTo(httpResponseMessage);
+        }
+
+        private object GetExpectedResponse(HttpResponseModel httpResponseModel)
+        {
             HttpResponseMessage httpResponseMessage = new HttpResponseMessage
             {
                 StatusCode = httpResponseModel.StatusCode
             };
-            httpResponseModel.Headers.Dictionary.ForEach(s=>httpResponseMessage.Headers.Add(s.Key,s.Value.ToString()));
+            httpResponseModel.Headers.Dictionary.ForEach(s => httpResponseMessage.Headers.Add(s.Key, s.Value.ToString()));
+            var content = new StringContent(httpResponseModel.Body.Data, httpResponseModel.Body.ContentType.CharSet, httpResponseModel.Body.ContentType.MediaType);
             httpResponseMessage.Content = content;
+            return httpResponseMessage;
+        }
+
+        [Test]
+        public void TransformResponse_ShouldSetCorrectCharset_WhenPresent()
+        {
+            var content = new StringContent(Fixture.Create<string>(), Encoding.UTF8, "application/xml");
+
+            var httpResponseModel =
+                Fixture.Build<HttpResponseModel>()
+                    .With(m => m.Body,
+                        new Body()
+                        {
+                            Data = "Your mom",
+                            ContentType = new ContentType() {MediaType = "application/xml", CharSet = Encoding.UTF8}
+                        })
+                    .Create();
+            httpResponseModel.Headers.Add("Accept-Encoding", "gzip, deflate");
+            httpResponseModel.Headers.Add("Forwarded", "for=192.0.2.43, for=198.51.100.17");
+            HttpResponseMessage httpResponseMessage = new HttpResponseMessage();
+            httpResponseMessage.StatusCode = httpResponseModel.StatusCode;
+            httpResponseModel.Headers.Dictionary.ForEach(s => httpResponseMessage.Headers.Add(s.Key, s.Value.ToString()));
+            httpResponseMessage.Content = content;
+            Sut.Transform(httpResponseModel).ShouldBeEquivalentTo(httpResponseMessage);
+        }
+
+        [Test]
+        public void TransformResponse_ShouldReturnCorrectResponse_WhenSomeAttributesPresent()
+        {
+            var httpResponseModel = Fixture.Build<HttpResponseModel>().With(m => m.Body, new Body()).Create();
+            httpResponseModel.Headers.Add("Accept-Encoding", "gzip, deflate");
+            httpResponseModel.Headers.Add("Forwarded", "for=192.0.2.43, for=198.51.100.17");
+            HttpResponseMessage httpResponseMessage = new HttpResponseMessage();
+            httpResponseMessage.StatusCode = httpResponseModel.StatusCode;
+            httpResponseModel.Headers.Dictionary.ForEach(s => httpResponseMessage.Headers.Add(s.Key, s.Value.ToString()));
             Sut.Transform(httpResponseModel).ShouldBeEquivalentTo(httpResponseMessage);
         }
     }
