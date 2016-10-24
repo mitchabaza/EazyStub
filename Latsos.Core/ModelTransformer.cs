@@ -18,8 +18,18 @@ namespace Latsos.Core
             var httpResponseMessage = new HttpResponseMessage(responseModel.StatusCode);
             if (responseModel.Body.Data != null)
             {
-                httpResponseMessage.Content = new StringContent(responseModel.Body.Data, responseModel.Body.ContentType.CharSet,
-                    responseModel.Body.ContentType.MediaType);
+                if (responseModel.Body.ContentType?.MediaType != null && responseModel.Body.ContentType?.CharSet != null)
+                {
+                    httpResponseMessage.Content = new StringContent(responseModel.Body.Data,
+                        Encoding.GetEncoding(responseModel.Body.ContentType.CharSet),
+                        responseModel.Body.ContentType.MediaType);
+
+                }
+                else
+                {
+                    httpResponseMessage.Content = new StringContent(responseModel.Body.Data);
+
+                }
 
             }
 
@@ -39,7 +49,7 @@ namespace Latsos.Core
             };
             if (request.Content?.Headers?.ContentType?.CharSet!=null)
             {
-                body.ContentType.CharSet = Encoding.GetEncoding(request.Content.Headers.ContentType.CharSet);
+                body.ContentType.CharSet = request.Content.Headers.ContentType.CharSet;
             }
             var method = request.Method;
             var query = request.RequestUri.Query;

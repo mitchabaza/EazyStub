@@ -108,7 +108,7 @@ namespace Latsos.Client
             _registration = new RequestRegistration();
         }
 
-        public RequestBuilder Body(string data, string mediaType, Encoding charset)
+        public RequestBuilder Body(string data, string mediaType, string charset)
         {
             _registration.Body.Any = false;
             _registration.Body.Value = new Body()

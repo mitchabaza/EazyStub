@@ -3,6 +3,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.Hosting;
 using System.Web.Http.Routing;
 using Latsos.Core;
 using Latsos.Web.Controllers;
@@ -30,7 +33,11 @@ namespace Latsos.Web
             CancellationToken cancellationToken)
         {
 
-            _logger.WriteInformation(_transformer.Transform(request).ToString());
+            if (RouteIsReal(request))
+            {
+                return base.SendAsync(request, cancellationToken);
+            }
+     
             var response = _evaluator.FindRegisteredResponse(_transformer.Transform(request));
             if (response != null)
             {
@@ -41,6 +48,11 @@ namespace Latsos.Web
                 return task.Task;
             }
             return base.SendAsync(request, cancellationToken);
+        }
+
+        private bool RouteIsReal(HttpRequestMessage request)
+        {
+            return ((IHttpRouteData[])request.GetConfiguration().Routes.GetRouteData(request)?.Values["MS_SubRoutes"])?.FirstOrDefault()?.Route?.RouteTemplate!=null;
         }
     }
 }

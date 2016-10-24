@@ -15,7 +15,7 @@ namespace Latsos.Test.Server
         public void Execute_ShouldReplaceVirtualPathInFirstSegment()
         {
 
-            Fixture.Freeze<Mock<IHostingEnvironment>>().SetupGet(m => m.ApplicationVirtualPath).Returns("base");
+            Fixture.Freeze<Mock<IHostingEnvironment>>().SetupGet(m => m.ApplicationVirtualPath).Returns("/base");
             var model = Fixture.Build<HttpRequestModel>().With(m => m.LocalPath, "/base/customer/1/base").Create();
             Sut.Execute(model);
             model.LocalPath.Should().Be("/customer/1/base");

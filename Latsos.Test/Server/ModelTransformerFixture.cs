@@ -12,6 +12,7 @@ using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using Ploeh.AutoFixture;
+using Encoding = System.Text.Encoding;
 
 namespace Latsos.Test.Server
 {
@@ -30,6 +31,23 @@ namespace Latsos.Test.Server
                 ).LocalPath.Should().Be("hi mom");
         }
 
+
+        [Test]
+        public void TransformResponse_ShouldNotSupplyCharSetMediatType_WhenBothMissing()
+        {
+            var response = Fixture.Build<HttpResponseModel>().Without(s=>s.Body).Create();
+            response.Body = new Body() {Data = "hi mom!"};
+            var exepcted = new StringContent("hi mom");
+            Sut.Transform(response).Content.ShouldBeEquivalentTo(exepcted);
+        }
+        [Test]
+        public void TransformResponse_ShouldNotSupplyCharSetMediaType_WhenEitherMissing()
+        {
+            var response = Fixture.Build<HttpResponseModel>().Without(s => s.Body).Create();
+            response.Body = new Body() { Data = "hi mom!" ,ContentType = new ContentType() {CharSet = Encoding.Default.WebName } };
+            var exepcted = new StringContent("hi mom");
+            Sut.Transform(response).Content.ShouldBeEquivalentTo(exepcted);
+        }
 
         [Test]
         public void TransformRequest_ShouldReturnAllAttributes()
@@ -55,7 +73,7 @@ namespace Latsos.Test.Server
                     MediaType = content.Headers.ContentType.MediaType,
                     CharSet =
                         content.Headers?.ContentType.CharSet != null
-                            ? Encoding.GetEncoding(content.Headers?.ContentType?.CharSet)
+                            ? Encoding.GetEncoding(content.Headers?.ContentType?.CharSet).WebName
                             : null
                 }
             };
@@ -77,7 +95,7 @@ namespace Latsos.Test.Server
                         new Body()
                         {
                             Data = "",
-                            ContentType = new ContentType() {MediaType = "application/xml", CharSet = null}
+                            ContentType = new ContentType() {MediaType = "application/xml", CharSet = Encoding.Default.WebName }
                         })
                     .Create();
             httpResponseModel.Headers.Add("Accept-Encoding", "gzip, deflate");
@@ -95,7 +113,7 @@ namespace Latsos.Test.Server
                 StatusCode = httpResponseModel.StatusCode
             };
             httpResponseModel.Headers.Dictionary.ForEach(s => httpResponseMessage.Headers.Add(s.Key, s.Value.ToString()));
-            var content = new StringContent(httpResponseModel.Body.Data, httpResponseModel.Body.ContentType.CharSet, httpResponseModel.Body.ContentType.MediaType);
+            var content = new StringContent(httpResponseModel.Body.Data, Encoding.GetEncoding(httpResponseModel.Body.ContentType.CharSet) , httpResponseModel.Body.ContentType.MediaType);
             httpResponseMessage.Content = content;
             return httpResponseMessage;
         }
@@ -111,7 +129,7 @@ namespace Latsos.Test.Server
                         new Body()
                         {
                             Data = "Your mom",
-                            ContentType = new ContentType() {MediaType = "application/xml", CharSet = Encoding.UTF8}
+                            ContentType = new ContentType() {MediaType = "application/xml", CharSet = "utf-8"}
                         })
                     .Create();
             httpResponseModel.Headers.Add("Accept-Encoding", "gzip, deflate");

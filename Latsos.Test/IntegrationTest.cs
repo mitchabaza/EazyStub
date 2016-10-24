@@ -1,13 +1,10 @@
 using System;
 using System.Net;
-using System.Net.Http;
-using System.Web.Http.Results;
+using System.Text;
 using FluentAssertions;
 using Latsos.Client;
 using Latsos.Shared;
-using Newtonsoft.Json;
 using NUnit.Framework;
-using RestSharp;
 using Method = Latsos.Shared.Method;
 
 namespace Latsos.Test
@@ -35,7 +32,7 @@ namespace Latsos.Test
                 .Method(Method.Get)
                 .Path("customer/get/1")
                 .Returns()
-                .StatusCode(HttpStatusCode.OK).Body(returnPayload, "application/json")
+                .StatusCode(HttpStatusCode.OK).Body(returnPayload, "application/json",Encoding.UTF8.WebName)
                 .Build();
 
             Console.WriteLine(behaviorRegistrationRequest.ToJson());
@@ -45,7 +42,7 @@ namespace Latsos.Test
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.Content.Should().Be(returnPayload);
-            response.ContentType.Should().Be("application/json");
+            response.ContentType.Should().Be("application/json; charset=utf-8");
         }
 
         [Test]
@@ -68,8 +65,9 @@ namespace Latsos.Test
                 .Method(Method.Get)
                 .Path("test/method/1")
                 .Returns()
-                .Body("","application/json;charset=utf-8")
+                .Body("mom","application/json", Encoding.UTF8.WebName)
                 .Build();
+            Console.WriteLine(behaviorRegistrationRequest2.ToJson());
             stub.Add(behaviorRegistrationRequest2);
 
             stub.List().ShouldBeEquivalentTo(new[] { behaviorRegistrationRequest1, behaviorRegistrationRequest2 });

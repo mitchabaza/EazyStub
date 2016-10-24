@@ -2,9 +2,19 @@ using System.Text;
 
 namespace Latsos.Shared
 {
+    
+
     public class ContentType
     {
-       
+        public ContentType(string mediaType, string charSet)
+        {
+            MediaType = mediaType;
+            CharSet = charSet;
+        }
+
+        public ContentType()
+        {
+        }
 
         protected bool Equals(ContentType other)
         {
@@ -23,11 +33,16 @@ namespace Latsos.Shared
         {
             unchecked
             {
-                return ((MediaType?.GetHashCode() ?? 0)*397) ^ (CharSet?.GetHashCode() ?? 0);
+                return ((MediaType?.GetHashCode() ?? 0)*397) ^ CharSet.GetHashCode();
             }
         }
 
         public string MediaType { get; set; }
-        public Encoding CharSet { set; get; }
+        public string CharSet { set; get; }
+
+        public override string ToString()
+        {
+            return $"MediaType: {MediaType}, CharSet: {CharSet}";
+        }
     }
 }

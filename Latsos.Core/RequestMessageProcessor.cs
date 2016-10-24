@@ -8,7 +8,7 @@ namespace Latsos.Core
     {
         private readonly IHostingEnvironment _environment;
 
-        private string ReplacementText => $@"{_environment.ApplicationVirtualPath}/";
+        private string ReplacementText => $@"{_environment.ApplicationVirtualPath}";
 
         public LocalPathProcessor(IHostingEnvironment environment)
         {

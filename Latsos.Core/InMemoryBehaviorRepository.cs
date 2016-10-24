@@ -26,7 +26,7 @@ namespace Latsos.Core
         }
         public RequestRegistration[] FindByLocalPath(string localPath)
         {
-          return  _registeredRequests.Keys.Where(k => k.LocalPath!=null && k.LocalPath.Equals(localPath)).Select(s => s).ToArray();
+          return  _registeredRequests.Keys.Where(k =>  k.LocalPath.Equals(localPath)).Select(s => s).ToArray();
 
         }
 
