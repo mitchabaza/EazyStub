@@ -8,6 +8,8 @@ using Castle.Core.Internal;
 using FluentAssertions;
 using Latsos.Core;
 using Latsos.Shared;
+using Latsos.Shared.Request;
+using Latsos.Shared.Response;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
@@ -22,18 +24,20 @@ namespace Latsos.Test.Server
         public void TransformRequest_ShouldInvokePostProcessorBeforeReturning()
 
         {
+            var httpRequestModel = Fixture.Freeze<HttpRequestModel>();
             var request = Fixture.Build<HttpRequestMessage>()
+
                 .Create();
             Fixture.Freeze<Mock<IRequestModelProcessor>>()
                 .Setup(s => s.Execute(It.IsAny<HttpRequestModel>()))
-                .Callback<HttpRequestModel>(r => r.LocalPath = "hi mom");
+                .Returns(httpRequestModel);
             Sut.Transform(request
-                ).LocalPath.Should().Be("hi mom");
+                ).Should().Be(httpRequestModel);
         }
 
 
         [Test]
-        public void TransformResponse_ShouldNotSupplyCharSetMediatType_WhenBothMissing()
+        public void TransformResponse_ShouldNotSupplyCharSetMediaType_WhenBothMissing()
         {
             var response = Fixture.Build<HttpResponseModel>().Without(s=>s.Body).Create();
             response.Body = new Body() {Data = "hi mom!"};
@@ -54,9 +58,11 @@ namespace Latsos.Test.Server
         {
             var request = Fixture.Create<HttpRequestMessage>();
             var httpRequestModel = TransformModel(request);
+            var processor = Fixture.Freeze<Mock<IRequestModelProcessor>>();
+            processor.Setup(s => s.Execute(It.IsAny<HttpRequestModel>())).Returns((HttpRequestModel rm) => rm);
             Sut.Transform(request).ShouldBeEquivalentTo(httpRequestModel);
         }
-
+       
         private HttpRequestModel TransformModel(HttpRequestMessage request)
         {
             var content = new StringContent(Fixture.Create<string>());

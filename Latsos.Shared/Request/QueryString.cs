@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Latsos.Shared
+namespace Latsos.Shared.Request
 {
     public class QueryString:IEquatable<QueryString>
     {

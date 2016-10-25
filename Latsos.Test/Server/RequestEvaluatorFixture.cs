@@ -2,6 +2,9 @@
 using FluentAssertions;
 using Latsos.Core;
 using Latsos.Shared;
+using Latsos.Shared.Request;
+using Latsos.Shared.Response;
+using Latsos.Test.Util;
 using Moq;
 using NUnit.Framework;
 using Ploeh.AutoFixture;

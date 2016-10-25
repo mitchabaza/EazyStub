@@ -2,6 +2,7 @@
 using System.Web.Http;
 using Latsos.Core;
 using Latsos.Shared;
+using Latsos.Shared.Response;
 
 namespace Latsos.Web.Controllers
 {

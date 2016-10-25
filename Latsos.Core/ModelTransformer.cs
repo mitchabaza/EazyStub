@@ -1,6 +1,8 @@
 using System.Net.Http;
 using System.Text;
 using Latsos.Shared;
+using Latsos.Shared.Request;
+using Latsos.Shared.Response;
 
 namespace Latsos.Core
 {
@@ -23,14 +25,11 @@ namespace Latsos.Core
                     httpResponseMessage.Content = new StringContent(responseModel.Body.Data,
                         Encoding.GetEncoding(responseModel.Body.ContentType.CharSet),
                         responseModel.Body.ContentType.MediaType);
-
                 }
                 else
                 {
                     httpResponseMessage.Content = new StringContent(responseModel.Body.Data);
-
                 }
-
             }
 
             foreach (var header in responseModel.Headers.Dictionary)
@@ -42,12 +41,12 @@ namespace Latsos.Core
 
         public HttpRequestModel Transform(HttpRequestMessage request)
         {
-         var body = new Body()
+            var body = new Body()
             {
                 Data = request.Content.ReadAsStringAsync().Result,
                 ContentType = new ContentType() {MediaType = request.Content.Headers?.ContentType?.MediaType}
             };
-            if (request.Content?.Headers?.ContentType?.CharSet!=null)
+            if (request.Content?.Headers?.ContentType?.CharSet != null)
             {
                 body.ContentType.CharSet = request.Content.Headers.ContentType.CharSet;
             }
@@ -61,8 +60,7 @@ namespace Latsos.Core
             }
             var localPath = request.RequestUri.LocalPath;
             var requestModel = new HttpRequestModel(body, method, headers, query, localPath, port);
-            _processor.Execute(requestModel);
-            return requestModel;
+            return _processor.Execute(requestModel);
         }
     }
 }

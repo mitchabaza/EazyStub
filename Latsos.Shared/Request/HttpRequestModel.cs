@@ -1,10 +1,11 @@
 using System;
-using System.Net.Http;
 
-namespace Latsos.Shared
+namespace Latsos.Shared.Request
 {
     public class HttpRequestModel
     {
+         
+
         public HttpRequestModel(Body body, Method method, Headers headers, string query, string localPath, int port)
         {
             if (body == null)
@@ -23,11 +24,11 @@ namespace Latsos.Shared
             {
                 throw new ArgumentException("query");
             }
-            if (localPath == null )
+            if (string.IsNullOrWhiteSpace(localPath))
             {
                 throw new ArgumentException("localPath");
             }
-            if (port == 00)
+            if (port == 0)
             {
                 throw new ArgumentException("port");
             }
@@ -41,12 +42,12 @@ namespace Latsos.Shared
 
        
 
-        public Body Body { get; set; }
-        public Method Method { get; set; }
-        public Headers Headers { get; set; }
-        public string Query { get; set; }
-        public string LocalPath { get; set; }
-        public int Port { get; set; }
+        public Body Body { get; }
+        public Method Method { get; }
+        public Headers Headers { get; }
+        public string Query { get; }
+        public string LocalPath { get; }
+        public int Port { get; }
 
         public override string ToString()
         {

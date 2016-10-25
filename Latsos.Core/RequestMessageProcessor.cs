@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using Latsos.Shared;
+using Latsos.Shared.Request;
 
 namespace Latsos.Core
 {
@@ -16,21 +17,22 @@ namespace Latsos.Core
         }
 
 
-        public void Execute(HttpRequestModel model)
+        public HttpRequestModel Execute(HttpRequestModel model)
         {
             
             var localPath = model.LocalPath;
 
             if (string.IsNullOrWhiteSpace(localPath))
             {
-                return;
+                return model;
             }
             var firstSegment = localPath.IndexOf(ReplacementText, 0, StringComparison.Ordinal);
 
             if (firstSegment >= 0)
             {
-                model.LocalPath = localPath.Substring(ReplacementText.Length);
+                return new HttpRequestModel(model.Body, model.Method,model.Headers,model.Query, localPath.Substring(ReplacementText.Length),model.Port);
             }
+            return model;
         }
     }
 }

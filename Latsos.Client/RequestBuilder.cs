@@ -2,6 +2,7 @@
 using System.Text;
 using EnsureThat;
 using Latsos.Shared;
+using Latsos.Shared.Request;
 
 namespace Latsos.Client
 {

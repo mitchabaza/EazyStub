@@ -9,6 +9,8 @@ using System.Web.Http.Routing;
 using FluentAssertions;
 using Latsos.Core;
 using Latsos.Shared;
+using Latsos.Shared.Request;
+using Latsos.Shared.Response;
 using Latsos.Web;
 using Moq;
 using NUnit.Framework;
@@ -72,7 +74,7 @@ namespace Latsos.Test.Server
 
 
         [Test]
-        public void SendAsync_ShouldReturnMockResponse_WhenRouteMatched()
+        public void SendAsync_ShouldReturStubResponse_WhenRouteMatched()
         {
             var responseModel = Fixture.Create<HttpResponseModel>();
             var response = Fixture.Create<HttpResponseMessage>();

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Latsos.Shared;
+using Latsos.Shared.Request;
 
 namespace Latsos.Core
 {

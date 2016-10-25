@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Latsos.Core;
 using Latsos.Shared;
+using Latsos.Shared.Request;
 using NUnit.Framework;
 using Ploeh.AutoFixture;
 

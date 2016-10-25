@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using Latsos.Shared;
+using Latsos.Shared.Request;
+using Latsos.Shared.Response;
 
 namespace Latsos.Core
 {

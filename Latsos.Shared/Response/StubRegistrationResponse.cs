@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Latsos.Shared
+namespace Latsos.Shared.Response
 {
     public class StubRegistrationResponse
     {

@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Latsos.Test.System;
-using Latsos.Test.System.ArrayExtensions;
+using Latsos.Test.Util.System;
+using Latsos.Test.Util.System.ArrayExtensions;
 using Newtonsoft.Json;
 
-namespace Latsos.Test
+namespace Latsos.Test.Util
 {
     public static class ObjectExtensions
     {

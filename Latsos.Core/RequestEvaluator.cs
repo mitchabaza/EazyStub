@@ -3,6 +3,8 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Hosting;
 using Latsos.Shared;
+using Latsos.Shared.Request;
+using Latsos.Shared.Response;
 using Microsoft.Owin.Logging;
 
 namespace Latsos.Core

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using FluentAssertions;
 using Latsos.Client;
 using Latsos.Shared;
+using Latsos.Shared.Request;
+using Latsos.Test.Util;
 using NUnit.Framework;
 
-namespace Latsos.Test
+namespace Latsos.Test.Client
 {
     public class RequestBuilderFixture
     {

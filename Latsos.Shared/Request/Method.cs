@@ -1,7 +1,7 @@
 using System;
 using System.Net.Http;
 
-namespace Latsos.Shared
+namespace Latsos.Shared.Request
 {
     public class Method:IEquatable<Method>
     {

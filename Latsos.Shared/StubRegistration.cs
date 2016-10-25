@@ -1,4 +1,7 @@
-﻿namespace Latsos.Shared
+﻿using Latsos.Shared.Request;
+using Latsos.Shared.Response;
+
+namespace Latsos.Shared
 {
     public class StubRegistration
     {

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Latsos.Core;
 using Latsos.Shared;
+using Latsos.Shared.Request;
 using Newtonsoft.Json;
 using RestSharp;
 using Method = RestSharp.Method;
@@ -53,25 +54,25 @@ namespace Latsos.Client
             return Execute(request);
         }
 
-        private Method ConvertMethod( Shared.Method method)
+        private Method ConvertMethod( Shared.Request.Method method)
         {
-            if (method.Equals(Shared.Method.Delete))
+            if (method.Equals(Shared.Request.Method.Delete))
             {
                 return RestSharp.Method.DELETE;
             }
-            if (method.Equals(Shared.Method.Post))
+            if (method.Equals(Shared.Request.Method.Post))
             {
                 return RestSharp.Method.POST;
             }
-            if (method.Equals(Shared.Method.Get))
+            if (method.Equals(Shared.Request.Method.Get))
             {
                 return RestSharp.Method.GET;
             }
-            if (method.Equals(Shared.Method.Options))
+            if (method.Equals(Shared.Request.Method.Options))
             {
                 return RestSharp.Method.OPTIONS;
             }
-            if (method.Equals(Shared.Method.Put))
+            if (method.Equals(Shared.Request.Method.Put))
             {
                 return RestSharp.Method.PUT;
             }

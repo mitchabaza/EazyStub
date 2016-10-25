@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Latsos.Shared;
+using Latsos.Test.Util;
 using NUnit.Framework;
 using Ploeh.AutoFixture;
 

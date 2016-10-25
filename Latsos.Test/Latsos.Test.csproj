@@ -42,8 +42,8 @@
       <HintPath>..\packages\FluentAssertions.4.14.0\lib\net45\FluentAssertions.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Moq, Version=4.5.22.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\packages\Moq.4.5.22\lib\net45\Moq.dll</HintPath>
+    <Reference Include="Moq, Version=4.5.23.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.5.23\lib\net45\Moq.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -98,20 +98,20 @@
     <Compile Include="Client\ResponseBuilderFixture.cs" />
     <Compile Include="HeaderFixture.cs" />
     <Compile Include="MethodFixture.cs" />
-    <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="Util\ObjectExtensions.cs" />
     <Compile Include="MatchRuleFixture.cs" />
     <Compile Include="Server\LocalPathProcessorFixture.cs" />
     <Compile Include="Server\ModelTransformerFixture.cs" />
     <Compile Include="Server\RequestMatcherFixture.cs" />
     <Compile Include="Client\RequestBuilderFixture.cs" />
-    <Compile Include="TestExtensions.cs" />
+    <Compile Include="Util\TestExtensions.cs" />
     <Compile Include="FixtureBase.cs" />
     <Compile Include="RequestRegistrationFixture.cs" />
     <Compile Include="Server\StubRequestHandlerFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\InnerHandler.cs" />
     <Compile Include="Server\RequestEvaluatorFixture.cs" />
-    <Compile Include="IntegrationTest.cs" />
+    <Compile Include="IntegrationFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

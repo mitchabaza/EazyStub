@@ -1,7 +1,7 @@
 using System.Net;
-using System.Net.Http.Headers;
+using Latsos.Shared.Request;
 
-namespace Latsos.Shared
+namespace Latsos.Shared.Response
 {
     /// <summary>
     /// The HTTP Response returned when a particular <see cref="RequestRegistration"></see> is matched

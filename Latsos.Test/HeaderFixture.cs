@@ -1,6 +1,7 @@
 using System;
 using FluentAssertions;
 using Latsos.Shared;
+using Latsos.Test.Util;
 using NUnit.Framework;
 
 namespace Latsos.Test

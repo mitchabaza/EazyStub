@@ -5,13 +5,14 @@ using System.Runtime.InteropServices;
 using System.Text;
 using EnsureThat;
 using Latsos.Shared;
+using Latsos.Shared.Response;
 
 
 namespace Latsos.Client
 {
     public class ResponseBuilder
     {
-        public StubBuilder Builder { get; }
+        internal StubBuilder Builder { get; }
         private string _mediaType;
         private string _data;
         private  Headers _headers = new Headers();

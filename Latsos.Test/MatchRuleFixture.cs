@@ -6,6 +6,7 @@ using System.Text;
 using FluentAssertions;
 using Latsos.Client;
 using Latsos.Shared;
+using Latsos.Test.Util;
 using Moq;
 using NUnit.Framework;
 using Ploeh.AutoFixture;
