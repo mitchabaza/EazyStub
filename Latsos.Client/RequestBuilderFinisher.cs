@@ -5,14 +5,11 @@ using Latsos.Shared.Request;
 
 namespace Latsos.Client
 {
-    public class RequestBuilderFinisher:RequestBuilder
+    public class RequestBuilderFinisher : RequestBuilder
     {
-        
         private RequestRegistration _registration = new RequestRegistration();
-        
-      
 
-        public RequestBuilderFinisher QueryString(string key, string value)
+        public RequestBuilderFinisher WithQueryString(string key, string value)
         {
             Ensure.That(key).IsNotEmpty();
             Ensure.That(value).IsNotEmpty();
@@ -25,14 +22,12 @@ namespace Latsos.Client
             else
             {
                 _registration.Query.Value = "?";
-
             }
             _registration.Query.Value += $"{key}={value}";
             return this;
-
         }
 
-        public RequestBuilderFinisher Port(int port)
+        public RequestBuilderFinisher WithPort(int port)
         {
             Ensure.That(port).IsInRange(0, short.MaxValue);
             _registration.Port.Any = false;
@@ -41,7 +36,7 @@ namespace Latsos.Client
             return this;
         }
 
-        public RequestBuilderFinisher Method(Method method)
+        public RequestBuilderFinisher WithMethod(Method method)
         {
             Ensure.That(method).IsNotNull();
             _registration.Method.Any = false;
@@ -49,7 +44,7 @@ namespace Latsos.Client
             return this;
         }
 
-        public RequestBuilderFinisher Header(string key, string value)
+        public RequestBuilderFinisher WithHeader(string key, string value)
         {
             Ensure.That(key).IsNotNull();
             Ensure.That(value).IsNotNull();
@@ -62,12 +57,12 @@ namespace Latsos.Client
             return this;
         }
 
-        public RequestBuilderFinisher Body(string data, string mediaType, string charset)
+        public RequestBuilderFinisher WithBody(string data, string mediaType, string charset)
         {
             _registration.Body.Any = false;
             _registration.Body.Value = new Body()
             {
-                ContentType = new ContentType() { CharSet = charset, MediaType = mediaType }
+                ContentType = new ContentType() {CharSet = charset, MediaType = mediaType}
             };
             return this;
         }
@@ -76,7 +71,7 @@ namespace Latsos.Client
         {
             if (string.IsNullOrEmpty(_registration.LocalPath))
             {
-                throw new InvalidOperationException("Path property value must be supplied");
+                throw new InvalidOperationException("WithPath property value must be supplied");
             }
             var reg = _registration;
             Clear();
@@ -85,20 +80,17 @@ namespace Latsos.Client
 
         internal void Clear()
         {
-
             _registration = new RequestRegistration();
         }
-        public RequestBuilderFinisher Body(string data, string mediaType)
+
+        public RequestBuilderFinisher WithBody(string data, string mediaType)
         {
             _registration.Body.Any = false;
-            _registration.Body.Value = new Body() { Data = data, ContentType = new ContentType() { MediaType = mediaType } };
+            _registration.Body.Value = new Body() {Data = data, ContentType = new ContentType() {MediaType = mediaType}};
             return this;
         }
 
-        public ResponseBuilder Response
-        {
-            get { return this.StubBuilder.ResponseBuilder; }
-        }
+        public ResponseBuilder WillReturnResponse => this.StubBuilder.ResponseBuilder;
 
         public RequestBuilderFinisher(StubBuilder stubBuilder) : base(stubBuilder)
         {

@@ -28,7 +28,7 @@ namespace Latsos.Test.Server
 
 
         //    repoMock.Setup(m => m.FindByLocalPath(httpRequestMessage.RequestUri.LocalPath))
-        //        .Response((Request[]) null);
+        //        .ReturnsResponse((Request[]) null);
 
         //    Sut.FindRegisteredResponse(httpRequestMessage).Should().BeNull();
         //}
@@ -42,7 +42,7 @@ namespace Latsos.Test.Server
 
 
         //    repoMock.Setup(m => m.FindByLocalPath(httpRequestMessage.RequestUri.LocalPath))
-        //        .Response(new Request[0]);
+        //        .ReturnsResponse(new Request[0]);
 
         //    Sut.FindRegisteredResponse(httpRequestMessage).Should().BeNull();
         //}
@@ -62,11 +62,11 @@ namespace Latsos.Test.Server
         //    var behaviorRepo = Fixture.Freeze<Mock<IBehaviorRepository>>();
         //    var modelTransformer = Fixture.Freeze<Mock<IModelTransformer>>();
         //    var matcher = Fixture.Freeze<Mock<IRequestMatcher>>();
-        //    modelTransformer.Setup(m => m.Transform(httpRequestMessage)).Response(httpRequstModel);
+        //    modelTransformer.Setup(m => m.Transform(httpRequestMessage)).ReturnsResponse(httpRequstModel);
         //    matcher.Setup(m => m.Match(matchingRequests, httpRequstModel))
-        //        .Response((Request) null)
+        //        .ReturnsResponse((Request) null)
         //        .Verifiable();
-        //    behaviorRepo.Setup(m => m.FindByLocalPath(It.IsAny<string>())).Response(matchingRequests);
+        //    behaviorRepo.Setup(m => m.FindByLocalPath(It.IsAny<string>())).ReturnsResponse(matchingRequests);
 
         //    Sut.FindRegisteredResponse(httpRequestMessage).Should().BeNull();
         //    matcher.VerifyAll();
@@ -90,12 +90,12 @@ namespace Latsos.Test.Server
         //    var behaviorRepo = Fixture.Freeze<Mock<IBehaviorRepository>>();
         //    var modelTransformer = Fixture.Freeze<Mock<IModelTransformer>>();
         //    var matcher = Fixture.Freeze<Mock<IRequestMatcher>>();
-        //    modelTransformer.Setup(m => m.Transform(httpRequestMessage)).Response(httpRequstModel);
-        //    modelTransformer.Setup(m => m.Transform(stubresponse)).Response(response);
+        //    modelTransformer.Setup(m => m.Transform(httpRequestMessage)).ReturnsResponse(httpRequstModel);
+        //    modelTransformer.Setup(m => m.Transform(stubresponse)).ReturnsResponse(response);
 
-        //    matcher.Setup(m => m.Match(matchingRequests, httpRequstModel)).Response(matchingRequests[0]);
-        //    behaviorRepo.Setup(m => m.FindByLocalPath(It.IsAny<string>())).Response(matchingRequests);
-        //    behaviorRepo.Setup(m => m.Unregister(requestRegistration)).Response(stubresponse);
+        //    matcher.Setup(m => m.Match(matchingRequests, httpRequstModel)).ReturnsResponse(matchingRequests[0]);
+        //    behaviorRepo.Setup(m => m.FindByLocalPath(It.IsAny<string>())).ReturnsResponse(matchingRequests);
+        //    behaviorRepo.Setup(m => m.Unregister(requestRegistration)).ReturnsResponse(stubresponse);
 
         //    Sut.FindRegisteredResponse(httpRequestMessage).Should().Be(response);
         //}

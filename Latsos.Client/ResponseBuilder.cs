@@ -20,7 +20,7 @@ namespace Latsos.Client
             Builder = stubBuilder;
         }
 
-        public ResponseBuilderFinisher Body(string content, string mediatype, string charSet )
+        public ResponseBuilderFinisher WithBody(string content, string mediatype, string charSet )
         {
 
             _responseModel.Body.Data = content;
@@ -29,7 +29,7 @@ namespace Latsos.Client
 
             return new ResponseBuilderFinisher(this);
         }
-        public ResponseBuilderFinisher Body(string content)
+        public ResponseBuilderFinisher WithBody(string content)
         {
 
             _responseModel.Body.Data = content;
@@ -38,13 +38,13 @@ namespace Latsos.Client
             return new ResponseBuilderFinisher(this);
         }
 
-        public ResponseBuilderFinisher StatusCode(HttpStatusCode code)
+        public ResponseBuilderFinisher WithStatusCode(HttpStatusCode code)
         {
             _responseModel.StatusCode = code;
             return new ResponseBuilderFinisher(this);
         }
 
-        public ResponseBuilderFinisher StatusCode(int code)
+        public ResponseBuilderFinisher WithStatusCode(int code)
         {
             _responseModel.StatusCode = (HttpStatusCode) code;
             return new ResponseBuilderFinisher(this);
@@ -52,7 +52,7 @@ namespace Latsos.Client
 
       
 
-        public ResponseBuilderFinisher Header(string key, string value)
+        public ResponseBuilderFinisher WithHeader(string key, string value)
         {
             Ensure.That(key).IsNotEmpty();
             Ensure.That(value).IsNotEmpty();

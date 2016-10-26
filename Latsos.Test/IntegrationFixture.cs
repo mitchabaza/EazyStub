@@ -26,7 +26,7 @@ namespace Latsos.Test
         {
             var stub = new Factory();
             
-            stub.Register(new StubBuilder().Request.Path("dance").Response.StatusCode(HttpStatusCode.Conflict).Build());
+            stub.Register(new StubBuilder().Request.WithPath("dance").ReturnsResponse.WithStatusCode(HttpStatusCode.Conflict).Build());
             stub.List().Length.Should().BeGreaterOrEqualTo(1);
             stub.Clear();
             stub.List().ShouldBeEquivalentTo(new StubRegistration[0]);
@@ -38,12 +38,12 @@ namespace Latsos.Test
         {
             var stub = new Factory();
             stub.Clear();
-            stub.Register(new StubBuilder().Request.Path("path2").Response.StatusCode(HttpStatusCode.Conflict).Build());
-            stub.Register(new StubBuilder().Request.Path("path1").Response.StatusCode(HttpStatusCode.Conflict).Build());
+            stub.Register(new StubBuilder().Request.WithPath("path2").ReturnsResponse.WithStatusCode(HttpStatusCode.Conflict).Build());
+            stub.Register(new StubBuilder().Request.WithPath("path1").ReturnsResponse.WithStatusCode(HttpStatusCode.Conflict).Build());
             stub.List().Length.Should().Be(2);
-            Console.WriteLine(new StubBuilder().Request.Path("path2").Build().GetHashCode());
-            Console.WriteLine(new StubBuilder().Request.Path("path2").Build().GetHashCode());
-            stub.UnRegister(new StubBuilder().Request.Path("path1").Response.StatusCode(HttpStatusCode.Conflict).Build());
+            Console.WriteLine(new StubBuilder().Request.WithPath("path2").Build().GetHashCode());
+            Console.WriteLine(new StubBuilder().Request.WithPath("path2").Build().GetHashCode());
+            stub.UnRegister(new StubBuilder().Request.WithPath("path1").ReturnsResponse.WithStatusCode(HttpStatusCode.Conflict).Build());
             stub.List().Length.Should().BeGreaterOrEqualTo(1);
 
         }
@@ -56,10 +56,10 @@ namespace Latsos.Test
             var builder = new StubBuilder();
             
             var behaviorRegistrationRequest = builder.Request
-                .Path("customer/get/1")
-                .Method(Method.Get)
-                .Response
-                .StatusCode(HttpStatusCode.OK).Body(returnPayload, "application/json",Encoding.UTF8.WebName)
+                .WithPath("customer/get/1")
+                .WithMethod(Method.Get)
+                .ReturnsResponse
+                .WithStatusCode(HttpStatusCode.OK).WithBody(returnPayload, "application/json",Encoding.UTF8.WebName)
                 .Build();
 
             Console.WriteLine(behaviorRegistrationRequest.ToJson());
@@ -79,10 +79,10 @@ namespace Latsos.Test
             var builder = new StubBuilder();
             var behaviorRegistrationRequest1 = builder.Request
              
-                .Path("test/method/1").Method(Method.Get)
-                .Header("buzz","zz")
-                .Response
-                .StatusCode(HttpStatusCode.BadGateway)
+                .WithPath("test/method/1").WithMethod(Method.Get)
+                .WithHeader("buzz","zz")
+                .ReturnsResponse
+                .WithStatusCode(HttpStatusCode.BadGateway)
                 .Build();
             
             stub.Register(behaviorRegistrationRequest1);
@@ -90,9 +90,9 @@ namespace Latsos.Test
 
             var behaviorRegistrationRequest2 = builder.Request
                
-                .Path("test/method/1").Method(Method.Get)
-                .Response
-                .Body("mom","application/json", Encoding.UTF8.WebName)
+                .WithPath("test/method/1").WithMethod(Method.Get)
+                .ReturnsResponse
+                .WithBody("mom","application/json", Encoding.UTF8.WebName)
                 .Build();
             Console.WriteLine(behaviorRegistrationRequest2.ToJson());
             stub.Register(behaviorRegistrationRequest2);

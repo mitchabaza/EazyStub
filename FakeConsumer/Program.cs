@@ -13,7 +13,7 @@ namespace FakeConsumer
         static void Main(string[] args)
         {
             var builder = new StubBuilder();
-            builder.Request.Path("customer/1").Response.StatusCode(200).Build().Register();
+            builder.AllRequests.WithPath("customer/1").WillReturnResponse().WithStatusCode(200).Build().Register();
             
         }
     }

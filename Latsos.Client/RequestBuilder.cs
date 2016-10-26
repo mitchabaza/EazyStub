@@ -19,7 +19,7 @@ namespace Latsos.Client
         }
 
 
-        public RequestBuilderFinisher Path(string path)
+        public RequestBuilderFinisher WithPath(string path)
         {
             return new RequestBuilderFinisher(this.StubBuilder, path);
         }

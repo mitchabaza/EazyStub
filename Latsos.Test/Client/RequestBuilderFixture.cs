@@ -18,8 +18,8 @@ namespace Latsos.Test.Client
 
             var id = Guid.NewGuid().ToString();
             var registration = builder.Request
-                .Path("buzz/dance")
-                .QueryString("id", id).Build();
+                .WithPath("buzz/dance")
+                .WithQueryString("id", id).Build();
 
             registration.ShouldBeEquivalentTo(
                 new RequestRegistration()
@@ -39,7 +39,7 @@ namespace Latsos.Test.Client
 
             var id = Guid.NewGuid().ToString();
             var registration = builder.Request
-                .Path("etc/1").Method(Method.Post).QueryString("id", id).QueryString("jack", "jill")
+                .WithPath("etc/1").WithMethod(Method.Post).WithQueryString("id", id).WithQueryString("jack", "jill")
                 .Build();
 
             registration.ShouldBeEquivalentTo(
@@ -60,12 +60,12 @@ namespace Latsos.Test.Client
 
             var id = Guid.NewGuid().ToString();
             var registration = builder.Request
-                .Path("customer/delete/645564")
-                .Method(Method.Post)
-                .QueryString("tranId", id)
-                .QueryString("orgId", "64556456456")
-                .QueryString("custid", "654654")
-                .Port(9999)
+                .WithPath("customer/delete/645564")
+                .WithMethod(Method.Post)
+                .WithQueryString("tranId", id)
+                .WithQueryString("orgId", "64556456456")
+                .WithQueryString("custid", "654654")
+                .WithPort(9999)
                 .Build();
 
             registration.ShouldBeEquivalentTo(
@@ -85,14 +85,14 @@ namespace Latsos.Test.Client
         {
             var builder = new RequestBuilder(new StubBuilder());
              builder
-                .Path("test/method/1")
-                .Method(Method.Get).QueryString("customerId", "153").QueryString("orderId", "1314")
-                .Body("<Html/>", "text/html")
-                .Header("X-Powered-By", "IIS")
-                .Port(443)
+                .WithPath("test/method/1")
+                .WithMethod(Method.Get).WithQueryString("customerId", "153").WithQueryString("orderId", "1314")
+                .WithBody("<Html/>", "text/html")
+                .WithHeader("X-Powered-By", "IIS")
+                .WithPort(443)
                 .Build();
 
-            var request2 = builder.Path("test/method/1").Build();
+            var request2 = builder.WithPath("test/method/1").Build();
 
             request2.ShouldEqual(new RequestRegistration() {LocalPath = "test/method/1" });
         }
@@ -103,11 +103,11 @@ namespace Latsos.Test.Client
         {
             var builder = new RequestBuilder(new StubBuilder());
             var request = builder
-                .Path("test/method/1").Method(Method.Get)
-                .QueryString("customerId", "153").QueryString("orderId", "1314")
-                .Body("<Html/>", "text/html")
-                .Header("X-Powered-By", "IIS")
-                .Port(443)
+                .WithPath("test/method/1").WithMethod(Method.Get)
+                .WithQueryString("customerId", "153").WithQueryString("orderId", "1314")
+                .WithBody("<Html/>", "text/html")
+                .WithHeader("X-Powered-By", "IIS")
+                .WithPort(443)
                 .Build();
 
             var expectedRequest = new RequestRegistration
