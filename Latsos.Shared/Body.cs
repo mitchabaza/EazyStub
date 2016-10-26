@@ -5,6 +5,11 @@ namespace Latsos.Shared
 {
     public class Body:IEquatable<Body>
     {
+        public Body()
+        {
+            ContentType = new ContentType();
+        }
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;

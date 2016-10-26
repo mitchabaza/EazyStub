@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latsos.Shared", "Latsos.Sha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latsos.Core", "Latsos.Core\Latsos.Core.csproj", "{B4596AAF-A0D3-481A-A3C0-310C6B80B7B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FakeConsumer", "FakeConsumer\FakeConsumer.csproj", "{1503F2EB-ABDC-4FE5-95A2-E8AA6D36255D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{B4596AAF-A0D3-481A-A3C0-310C6B80B7B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4596AAF-A0D3-481A-A3C0-310C6B80B7B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4596AAF-A0D3-481A-A3C0-310C6B80B7B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1503F2EB-ABDC-4FE5-95A2-E8AA6D36255D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1503F2EB-ABDC-4FE5-95A2-E8AA6D36255D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1503F2EB-ABDC-4FE5-95A2-E8AA6D36255D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1503F2EB-ABDC-4FE5-95A2-E8AA6D36255D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -20,35 +20,26 @@ namespace Latsos.Test
     {
         private readonly Fixture _fixture = new Fixture();
 
-         
-     
-
-   
         [Test]
-        public void GetHashCode_ShouldWork()
+        public void GetHashCode_ShouldBeSame_WhenObjectsSame()
         {
-            
-            var dictionary = new ConcurrentDictionary<RequestRegistration, string>();
-
-            var httpRequest1 = _fixture.Create<RequestRegistration>();
-            var httpRequest2 = _fixture.Create<RequestRegistration>();
-
-            dictionary.TryAdd(httpRequest1,"").Should().BeTrue();
-            dictionary.TryAdd(httpRequest2,"").Should().BeTrue();
-
-
-            var dictionary2 = new ConcurrentDictionary<RequestRegistration, string>();
-
             var httpRequest3 = _fixture.Create<RequestRegistration>();
             var httpRequest4 = httpRequest3.Copy();
 
-            
-            dictionary2.TryAdd(httpRequest3, "").Should().BeTrue();
-            dictionary2.TryAdd(httpRequest4, "").Should().BeFalse();
 
-
+            httpRequest3.GetHashCode().Should().Be(httpRequest4.GetHashCode());
 
         }
-      
+
+     
+        [Test]
+        public void GetHashCode_ShouldBeDifferent_WhenObjectsDifferent()
+        {
+            var httpRequest1 = _fixture.Create<RequestRegistration>();
+            var httpRequest2 = _fixture.Create<RequestRegistration>();
+
+            httpRequest1.GetHashCode().Should().NotBe(httpRequest2.GetHashCode());
+
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace Latsos.Test
             {
                 if (ReferenceEquals(null, obj)) return false;
                 if (ReferenceEquals(this, obj)) return true;
-                if (obj.GetType() != this.GetType()) return false;
+                if (obj.GetType() != GetType()) return false;
                 return Equals((Value) obj);
             }
 
@@ -36,7 +36,7 @@ namespace Latsos.Test
 
             public bool Equals(Value other)
             {
-                if (other.Property.Equals(this.Property))
+                if (other.Property.Equals(Property))
                 {
                     return true;
                 }

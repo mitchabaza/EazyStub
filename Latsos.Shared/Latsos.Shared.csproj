@@ -50,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContentType.cs" />
+    <Compile Include="Headers.cs" />
+    <Compile Include="QueryString.cs" />
     <Compile Include="Request\Method.cs" />
     <Compile Include="Request\QueryString.cs" />
     <Compile Include="Request\RequestRegistration.cs" />
@@ -58,7 +60,7 @@
     <Compile Include="StubRegistration.cs" />
     <Compile Include="Body.cs" />
     <Compile Include="DictionaryComparer.cs" />
-    <Compile Include="Headers.cs" />
+    <Compile Include="KeyValuePairs.cs" />
     <Compile Include="Request\HttpRequestModel.cs" />
     <Compile Include="Response\HttpResponseModel.cs" />
     <Compile Include="MatchRule.cs" />

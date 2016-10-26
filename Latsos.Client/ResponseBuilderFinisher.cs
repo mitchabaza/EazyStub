@@ -17,10 +17,10 @@ namespace Latsos.Client
             
             var stubRegistration = new StubRegistration()
             {
-                Request = _inner.Builder.RequestBuilder.Build(),
+                Request = _inner.Builder.RequestBuilderFinisher.Build(),
                 Response = _inner.BuildResponse()
             };
-            _inner.Builder.RequestBuilder.Clear();
+            _inner.Builder.RequestBuilderFinisher.Clear();
             _inner.Builder.ResponseBuilder.Clear();
             return stubRegistration ;
         }

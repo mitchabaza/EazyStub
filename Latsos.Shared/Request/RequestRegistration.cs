@@ -1,10 +1,11 @@
 using System;
+using EnsureThat;
 
 namespace Latsos.Shared.Request
 {
     public class RequestRegistration : IEquatable<RequestRegistration>
     {
-        private MatchRule<string> _query;
+        private string _localPath;
 
         public RequestRegistration()
         {
@@ -15,20 +16,39 @@ namespace Latsos.Shared.Request
             Method = new MatchRule<Method>(true, default(Method));
         }
 
-        
+        //public RequestRegistration(string localPath, MatchRule<int> port, MatchRule<Body> body, MatchRule<Headers> headers, MatchRule<string> query, MatchRule<Method> method)
+        //{
+        //    _localPath = localPath;
+        //    Port = port;
+        //    Body = body;
+        //    Headers = headers;
+        //    Query = query;
+        //    Method = method;
+        //}
+
         public MatchRule<int> Port { get; set; }
         public MatchRule<Body> Body { get; set; }
         public MatchRule<Headers> Headers { get; set; }
-        public string LocalPath { get; set; }
 
-        public MatchRule<string> Query
+        public string LocalPath
         {
-            get { return _query; }
+            get { return _localPath; }
             set
             {
-                _query = value;
+                Ensure.That(value).IsNotEmpty();
+                if (value.Trim().Substring(0, 1) != "/")
+                {
+                    value = "/" + value;
+                }
+                else
+                {
+                    value = value.Trim();
+                }
+                _localPath = value;
             }
         }
+
+        public MatchRule<string> Query { get; set; }
 
         public MatchRule<Method> Method { get; set; }
 

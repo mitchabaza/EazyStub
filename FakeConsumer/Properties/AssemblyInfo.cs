@@ -5,22 +5,22 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Latsos.Factory")]
+[assembly: AssemblyTitle("FakeConsumer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Latsos.Factory")]
+[assembly: AssemblyProduct("FakeConsumer")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly:InternalsVisibleTo("Latsos.Test")]
+
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d02db7b8-d137-4479-bd28-03393e17a76e")]
+[assembly: Guid("1503f2eb-abdc-4fe5-95a2-e8aa6d36255d")]
 
 // Version information for an assembly consists of the following four values:
 //

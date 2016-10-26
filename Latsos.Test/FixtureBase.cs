@@ -1,3 +1,5 @@
+using Latsos.Shared;
+using Latsos.Shared.Request;
 using NUnit.Framework;
 using Ploeh.AutoFixture;
 using Ploeh.AutoFixture.AutoMoq;
@@ -30,6 +32,7 @@ namespace Latsos.Test
         {
             var f = new Fixture();
             f.Customize(new CompositeCustomization(new AutoMoqCustomization()));
+            f.Register(()=>new HttpRequestModel(f.Create<Body>(), f.Create<Method>(), f.Create<Headers>(), f.Create<string>(), "/" + f.Create<string>(),114));
             return f;
         }
     }

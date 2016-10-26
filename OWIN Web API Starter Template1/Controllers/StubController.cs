@@ -2,6 +2,7 @@
 using System.Web.Http;
 using Latsos.Core;
 using Latsos.Shared;
+using Latsos.Shared.Request;
 using Latsos.Shared.Response;
 
 namespace Latsos.Web.Controllers
@@ -26,7 +27,14 @@ namespace Latsos.Web.Controllers
         public IHttpActionResult Add(StubRegistration request)
         {
             _repository.Register(request);
-            return Ok(new StubRegistrationResponse() {Identifier = Guid.NewGuid()});
+            return Ok( );
+        }
+        [HttpDelete]
+        [Route("Stubs/{id}")]
+        public IHttpActionResult Delete([FromUri]int id)
+        {
+            _repository.Unregister(id);
+            return Ok( );
         }
         [HttpDelete]
         [Route("Stubs")]

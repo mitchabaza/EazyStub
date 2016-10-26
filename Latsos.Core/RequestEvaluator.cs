@@ -43,7 +43,7 @@ namespace Latsos.Core
                 return null;
             }
             //we found a matching request , so return the mocked Response 
-            return _repository.Unregister(matchingRequest);
+            return _repository.Get(matchingRequest);
         }
     }
 }

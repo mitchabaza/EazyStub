@@ -14,7 +14,7 @@ namespace Latsos.Shared.Request
             }
             if (headers == null)
             {
-                throw new ArgumentException("headers");
+                throw new ArgumentException("Headers");
             }
             if (method == null)
             {

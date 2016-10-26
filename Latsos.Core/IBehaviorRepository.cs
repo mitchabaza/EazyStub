@@ -12,5 +12,7 @@ namespace Latsos.Core
         RequestRegistration[] FindByLocalPath(string localPath);
         void RemoveAll();
         StubRegistration [] GetAll();
+        HttpResponseModel Get(RequestRegistration matchingRequest);
+        void Unregister(int id);
     }
 }

@@ -1,8 +1,10 @@
-﻿using Latsos.Shared.Request;
+﻿using System.Threading;
+using Latsos.Shared.Request;
 using Latsos.Shared.Response;
 
 namespace Latsos.Shared
 {
+   
     public class StubRegistration
     {
         public HttpResponseModel Response { get; set; }

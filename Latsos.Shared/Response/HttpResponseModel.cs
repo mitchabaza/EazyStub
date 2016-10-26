@@ -17,6 +17,7 @@ namespace Latsos.Shared.Response
         {
             Headers = new Headers();
             Body=new Body();
+            StatusCode = HttpStatusCode.OK;
         }
 
         

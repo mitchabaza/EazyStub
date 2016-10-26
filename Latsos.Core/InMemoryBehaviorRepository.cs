@@ -11,24 +11,24 @@ namespace Latsos.Core
 {
     public class InMemoryBehaviorRepository : IBehaviorRepository
     {
-        private readonly ConcurrentDictionary<RequestRegistration, StubRegistration> _registeredRequests =
-            new ConcurrentDictionary<RequestRegistration, StubRegistration> (  );
+        private readonly ConcurrentDictionary<int, StubRegistration> _registeredRequests =
+            new ConcurrentDictionary<int, StubRegistration> (  );
       
 
         public void Register(StubRegistration request)
         {
 
-            _registeredRequests.TryAdd(request.Request, request);
+            _registeredRequests.TryAdd(request.Request.GetHashCode(), request);
         }
 
         public HttpResponseModel Find(RequestRegistration requestRegistration)
         {
             
-            return _registeredRequests[requestRegistration]?.Response;
+            return _registeredRequests[requestRegistration.GetHashCode()]?.Response;
         }
         public RequestRegistration[] FindByLocalPath(string localPath)
         {
-          return  _registeredRequests.Keys.Where(k =>  k.LocalPath.Equals(localPath)).Select(s => s).ToArray();
+          return  _registeredRequests.Values.Where(k =>  k.Request.LocalPath.Equals(localPath)).Select(s => s.Request).ToArray();
 
         }
 
@@ -42,24 +42,23 @@ namespace Latsos.Core
             return _registeredRequests.Values.ToArray();
         }
 
+        public HttpResponseModel Get(RequestRegistration matchingRequest)
+        {
+            return _registeredRequests[matchingRequest.GetHashCode()].Response;
+        }
+
         public HttpResponseModel Unregister(RequestRegistration requestRegistration)
         {
             StubRegistration outValue;
-            _registeredRequests.TryRemove(requestRegistration, out outValue);
+            _registeredRequests.TryRemove(requestRegistration.GetHashCode(), out outValue);
             return outValue.Response;
         }
-    }
-
-    public class Comparer:IEqualityComparer<RequestRegistration>
-    {
-        public bool Equals(RequestRegistration x, RequestRegistration y)
+        public void Unregister(int id)
         {
-            return x.Equals(y);
-        }
-
-        public int GetHashCode(RequestRegistration obj)
-        {
-            return obj.GetHashCode();
+            StubRegistration outValue;
+            _registeredRequests.TryRemove(id, out outValue);
         }
     }
+
+
 }
