@@ -21,6 +21,6 @@ namespace Latsos.Client
             ResponseBuilder = new ResponseBuilder(this);
         }
 
-        public RequestBuilder Request => RequestBuilder;
+        public RequestBuilder AllRequests => RequestBuilder;
     }
 }

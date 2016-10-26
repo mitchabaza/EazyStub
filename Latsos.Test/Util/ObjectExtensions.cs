@@ -66,10 +66,7 @@ namespace Latsos.Test.Util
             }
         }
 
-        public static string ToJson(this object obj)
-        {
-            return JsonConvert.SerializeObject(obj);
-        }
+      
         public static T Copy<T>(this T original)
         {
             return (T)Copy((Object)original);

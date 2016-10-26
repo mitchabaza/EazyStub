@@ -17,7 +17,7 @@ namespace Latsos.Test.Client
             var builder = new StubBuilder();
 
             var id = Guid.NewGuid().ToString();
-            var registration = builder.Request
+            var registration = builder.AllRequests
                 .WithPath("buzz/dance")
                 .WithQueryString("id", id).Build();
 
@@ -38,7 +38,7 @@ namespace Latsos.Test.Client
             var builder = new StubBuilder();
 
             var id = Guid.NewGuid().ToString();
-            var registration = builder.Request
+            var registration = builder.AllRequests
                 .WithPath("etc/1").WithMethod(Method.Post).WithQueryString("id", id).WithQueryString("jack", "jill")
                 .Build();
 
@@ -59,7 +59,7 @@ namespace Latsos.Test.Client
             var builder = new StubBuilder();
 
             var id = Guid.NewGuid().ToString();
-            var registration = builder.Request
+            var registration = builder.AllRequests
                 .WithPath("customer/delete/645564")
                 .WithMethod(Method.Post)
                 .WithQueryString("tranId", id)

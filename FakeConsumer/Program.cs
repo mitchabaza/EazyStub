@@ -14,7 +14,8 @@ namespace FakeConsumer
         {
             var builder = new StubBuilder();
             builder.AllRequests.WithPath("customer/1").WillReturnResponse().WithStatusCode(200).Build().Register();
-            
+            builder.AllRequests.WithPath("customer/1").WillReturnResponse().WithStatusCode(403).WithBody(new {Message="Bad Request"}.ToJson()).Build().Register();
+
         }
     }
 }

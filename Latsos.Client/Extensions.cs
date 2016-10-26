@@ -1,4 +1,5 @@
 using Latsos.Shared;
+using Newtonsoft.Json;
 
 namespace Latsos.Client
 {
@@ -8,6 +9,10 @@ namespace Latsos.Client
         {
             var s = new Factory();
             s.Register(registration);
+        }
+        public static string ToJson(this object obj)
+        {
+            return JsonConvert.SerializeObject(obj);
         }
         public static void Unregister(this StubRegistration registration)
         {

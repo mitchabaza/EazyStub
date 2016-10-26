@@ -90,7 +90,7 @@ namespace Latsos.Client
             return this;
         }
 
-        public ResponseBuilder WillReturnResponse => this.StubBuilder.ResponseBuilder;
+        public ResponseBuilder WillReturnResponse() => this.StubBuilder.ResponseBuilder;
 
         public RequestBuilderFinisher(StubBuilder stubBuilder) : base(stubBuilder)
         {
