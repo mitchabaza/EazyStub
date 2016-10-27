@@ -13,7 +13,7 @@ namespace Latsos.Client
 {
     public class ResponseBuilder
     {
-        internal StubBuilder StubBuilder { get; }
+        protected StubBuilder StubBuilder { get; }
         protected HttpResponseModel ResponseModel;
 
         public ResponseBuilder(StubBuilder stubStubBuilder, HttpResponseModel model)
@@ -62,7 +62,7 @@ namespace Latsos.Client
             return new ResponseBuilderFinisher(StubBuilder, ResponseModel);
         }
 
-        protected internal HttpResponseModel BuildResponse()
+        public HttpResponseModel Build()
         {
             return ResponseModel;
         }

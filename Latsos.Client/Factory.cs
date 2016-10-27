@@ -20,7 +20,7 @@ namespace Latsos.Client
         private StubBuilder _builder = new StubBuilder();
         
 
-        public Factory(string server = "http://localhost/Latsos")
+        public Factory(string server )
         {
             _client = new RestClient() {BaseUrl = new Uri(server)};
         }

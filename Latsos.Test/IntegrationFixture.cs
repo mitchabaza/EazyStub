@@ -13,10 +13,15 @@ namespace Latsos.Test
     [TestFixture]
     public class IntegrationFixture
     {
+        [SetUp]
+        public void SetUp()
+        {
+            Settings.SetServerUrl("http://localhost/Latsos");
+        }
         [Test]
         public void View_ShouldReturnNull_WhenNoRegistrations()
         {
-            var client =new Factory();
+            var client =new Factory(Settings.Url);
             client.Clear();
             client.List().ShouldBeEquivalentTo(new StubRegistration[0]);
         }
@@ -24,7 +29,7 @@ namespace Latsos.Test
         [Test]
         public void Delete_ShouldRemoveAllRegistrations()
         {
-            var stub = new Factory();
+            var stub = new Factory(Settings.Url);
             
             stub.Register(new StubBuilder().AllRequests.WithPath("dance").WillReturnResponse().WithStatusCode(HttpStatusCode.Conflict).Build());
             stub.List().Length.Should().BeGreaterOrEqualTo(1);
@@ -36,7 +41,7 @@ namespace Latsos.Test
         [Test]
         public void Delete_ShoulOnlyDeleteProvidedRegistration()
         {
-            var stub = new Factory();
+            var stub = new Factory(Settings.Url);
             stub.Clear();
             stub.Register(new StubBuilder().AllRequests.WithPath("path2").WillReturnResponse().WithStatusCode(HttpStatusCode.Conflict).Build());
             stub.Register(new StubBuilder().AllRequests.WithPath("path1").WillReturnResponse().WithStatusCode(HttpStatusCode.Conflict).Build());
@@ -52,7 +57,7 @@ namespace Latsos.Test
         public void MatchedRequest_ShouldReturnStubResponse()
         {
             var returnPayload = new {CustomerID=1, FirstName="Mitch", LastName="Abaza"}.ToJson();
-            var client = new Factory();
+            var client = new Factory(Settings.Url);
             var builder = new StubBuilder();
             
             var behaviorRegistrationRequest = builder.AllRequests
@@ -74,7 +79,7 @@ namespace Latsos.Test
         [Test]
         public void Add_ShouldWork()
         {
-            var stub = new Factory();
+            var stub = new Factory(Settings.Url);
             var builder = new StubBuilder();
             var behaviorRegistrationRequest1 = builder.AllRequests
              

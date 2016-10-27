@@ -61,6 +61,7 @@
     <Compile Include="RequestBuilderFinisher.cs" />
     <Compile Include="RestRequestEx.cs" />
     <Compile Include="Factory.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="StubBuilder.cs" />
     <Compile Include="ResponseBuilder.cs" />
     <Compile Include="ResponseBuilderFinisher.cs" />
