@@ -8,18 +8,22 @@ namespace Latsos.Shared.Response
     /// </summary>
     public class HttpResponseModel
     {
- 
         public Body Body { get; set; }
+
         public HttpStatusCode StatusCode { get; set; }
+
         public Headers Headers { get; set; }
 
         public HttpResponseModel()
         {
             Headers = new Headers();
             Body=new Body();
-            StatusCode = HttpStatusCode.OK;
+            
         }
 
-        
+        public override string ToString()
+        {
+            return $"Body: {Body}, StatusCode: {StatusCode}, Headers: {Headers}";
+        }
     }
 }

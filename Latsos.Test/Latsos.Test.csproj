@@ -130,7 +130,7 @@
       <Project>{f0acb08c-650b-4e32-83b1-fc14ce7bb516}</Project>
       <Name>Latsos.Shared</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OWIN Web API Starter Template1\Latsos.Server.csproj">
+    <ProjectReference Include="..\Latsos.Server\Latsos.Server.csproj">
       <Project>{c3be11a9-8ed7-47ec-a90b-71544f7433ff}</Project>
       <Name>Latsos.Server</Name>
     </ProjectReference>

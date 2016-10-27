@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latsos.Server", "OWIN Web API Starter Template1\Latsos.Server.csproj", "{C3BE11A9-8ED7-47EC-A90B-71544F7433FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latsos.Server", "Latsos.Server\Latsos.Server.csproj", "{C3BE11A9-8ED7-47EC-A90B-71544F7433FF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Latsos.Test", "Latsos.Test\Latsos.Test.csproj", "{25D9E91B-97FE-4DCB-B5C6-0E6F448705B9}"
 EndProject

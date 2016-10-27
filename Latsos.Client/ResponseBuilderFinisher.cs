@@ -1,28 +1,29 @@
 ﻿using System.Diagnostics.Contracts;
 using Latsos.Shared;
+using Latsos.Shared.Response;
 
 namespace Latsos.Client
 {
     public class ResponseBuilderFinisher  : ResponseBuilder
     {
-        private readonly ResponseBuilder _inner;
-
-        public ResponseBuilderFinisher(ResponseBuilder inner) : base(inner.Builder)
-        {
-            _inner = inner;
-        }
+       
 
         public StubRegistration Build()
         {
             
             var stubRegistration = new StubRegistration()
             {
-                Request = _inner.Builder.RequestBuilderFinisher.Build(),
-                Response = _inner.BuildResponse()
+                Request = StubBuilder.RequestBuilderFinisher.Build(),
+                Response = ResponseModel
             };
-            _inner.Builder.RequestBuilderFinisher.Clear();
-            _inner.Builder.ResponseBuilder.Clear();
+            StubBuilder.RequestBuilderFinisher.Clear();
+            StubBuilder.ResponseBuilder.Clear();
             return stubRegistration ;
+        }
+
+        public ResponseBuilderFinisher(StubBuilder stubStubBuilder, HttpResponseModel model) : base(stubStubBuilder, model)
+        {
+            
         }
     }
 }

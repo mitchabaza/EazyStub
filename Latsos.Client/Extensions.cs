@@ -10,6 +10,11 @@ namespace Latsos.Client
             var s = new Factory();
             s.Register(registration);
         }
+        public static void Register(this ResponseBuilderFinisher registration)
+        {
+            var s = new Factory();
+            s.Register(registration.Build());
+        }
         public static string ToJson(this object obj)
         {
             return JsonConvert.SerializeObject(obj);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using EnsureThat;
@@ -12,64 +13,64 @@ namespace Latsos.Client
 {
     public class ResponseBuilder
     {
-        internal StubBuilder Builder { get; }
-        private HttpResponseModel _responseModel = new HttpResponseModel();
+        internal StubBuilder StubBuilder { get; }
+        protected HttpResponseModel ResponseModel;
 
-        public ResponseBuilder(StubBuilder stubBuilder)
+        public ResponseBuilder(StubBuilder stubStubBuilder, HttpResponseModel model)
         {
-            Builder = stubBuilder;
+            ResponseModel = model;
+            StubBuilder = stubStubBuilder;
+        }
+        public ResponseBuilder(StubBuilder stubStubBuilder ):this(stubStubBuilder, new HttpResponseModel())
+        {
+            StubBuilder = stubStubBuilder;
         }
 
-        public ResponseBuilderFinisher WithBody(string content, string mediatype, string charSet )
+        public ResponseBuilderFinisher WithBody(string content, string mediatype, string charSet)
         {
+            ResponseModel.Body.Data = content;
+            ResponseModel.Body.ContentType.MediaType = mediatype;
+            ResponseModel.Body.ContentType.CharSet = charSet;
 
-            _responseModel.Body.Data = content;
-            _responseModel.Body.ContentType.MediaType = mediatype;
-            _responseModel.Body.ContentType.CharSet= charSet;
-
-            return new ResponseBuilderFinisher(this);
+            return new ResponseBuilderFinisher(StubBuilder, ResponseModel);
         }
+
         public ResponseBuilderFinisher WithBody(string content)
         {
+            ResponseModel.Body.Data = content;
+            ResponseModel.Body.ContentType.MediaType = null;
+            ResponseModel.Body.ContentType.CharSet = null;
 
-            _responseModel.Body.Data = content;
-            _responseModel.Body.ContentType.MediaType = null;
-            _responseModel.Body.ContentType.CharSet = null;
-            return new ResponseBuilderFinisher(this);
+            return new ResponseBuilderFinisher(StubBuilder, ResponseModel);
         }
 
         public ResponseBuilderFinisher WithStatusCode(HttpStatusCode code)
         {
-            _responseModel.StatusCode = code;
-            return new ResponseBuilderFinisher(this);
+            ResponseModel.StatusCode = code;
+
+            return new ResponseBuilderFinisher(StubBuilder, ResponseModel);
         }
 
-        public ResponseBuilderFinisher WithStatusCode(int code)
-        {
-            _responseModel.StatusCode = (HttpStatusCode) code;
-            return new ResponseBuilderFinisher(this);
-        }
-
-      
 
         public ResponseBuilderFinisher WithHeader(string key, string value)
         {
             Ensure.That(key).IsNotEmpty();
             Ensure.That(value).IsNotEmpty();
 
-            _responseModel.Headers.Add(key, value);
-            return new ResponseBuilderFinisher(this);
+            ResponseModel.Headers.Add(key, value);
+
+            return new ResponseBuilderFinisher(StubBuilder, ResponseModel);
         }
 
         protected internal HttpResponseModel BuildResponse()
         {
-            return _responseModel;
+            return ResponseModel;
         }
 
 
         internal void Clear()
         {
-            _responseModel = new HttpResponseModel();
+            ResponseModel = new HttpResponseModel();
         }
     }
 }
