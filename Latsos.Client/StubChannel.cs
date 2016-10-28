@@ -13,14 +13,12 @@ using Method = RestSharp.Method;
 
 namespace Latsos.Client
 {
-    public class Factory
+    public class StubChannel
     {
         private readonly RestClient _client;
         const string StubsResource = "Stubs";
-        private StubBuilder _builder = new StubBuilder();
-        
-
-        public Factory(string server )
+         
+        public StubChannel(string server)
         {
             _client = new RestClient() {BaseUrl = new Uri(server)};
         }
@@ -39,7 +37,7 @@ namespace Latsos.Client
             Execute(request);
         }
 
-        public IRestResponse Send(RequestRegistration requestRegistration)
+        internal IRestResponse Send(RequestRegistration requestRegistration)
         {
             var request = new RestRequestEx(requestRegistration.LocalPath,
                 ConvertMethod(requestRegistration.Method.Value));
