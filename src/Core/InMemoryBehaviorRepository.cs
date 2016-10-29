@@ -12,9 +12,13 @@ namespace EasyStub.Core
             new ConcurrentDictionary<int, StubRegistration> (  );
       
 
-        public void Register(StubRegistration request)
+        public bool Register(StubRegistration request)
         {
-            _registeredRequests.TryAdd(request.Request.GetHashCode(), request);
+            if (_registeredRequests.TryAdd(request.Request.GetHashCode(), request))
+            {
+                return true;
+            }
+            return false;
         }
 
         public HttpResponseModel Find(RequestRegistrationModel requestRegistrationModel)

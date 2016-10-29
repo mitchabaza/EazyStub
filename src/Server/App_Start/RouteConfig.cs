@@ -14,10 +14,6 @@ namespace EasyStub.Server
         public static void Configure(HttpConfiguration configuration)
         {
             configuration.MapHttpAttributeRoutes();
-
-          
-
-           
         }
     }
 }

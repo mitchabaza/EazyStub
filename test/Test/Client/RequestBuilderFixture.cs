@@ -11,15 +11,22 @@ namespace EasyStub.Test.Client
 {
     public class RequestBuilderFixture
     {
+        private RequestBuilder _requestBuilder;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _requestBuilder = new RequestBuilder(new StubBuilder());
+
+        }
         [Test]
         public void RequestBuilder_ShouldCreateRequest_WhenQueryStringSpecified()
         {
-            var builder = new StubBuilder();
-
+         
             var id = Guid.NewGuid().ToString();
-            var registration = builder.AllRequests
+            var registration = _requestBuilder
                 .WithPath("buzz/dance")
-                .WithQueryString("id", id).Build();
+                .AndQueryString("id", id).Build();
 
             registration.ShouldBeEquivalentTo(
                 new RequestRegistrationModel()
@@ -35,11 +42,10 @@ namespace EasyStub.Test.Client
         [Test]
         public void RequestBuilder_ShouldCreateRequest_WhenQueryStringAndMethodSpecified()
         {
-            var builder = new StubBuilder();
-
+           
             var id = Guid.NewGuid().ToString();
-            var registration = builder.AllRequests
-                .WithPath("etc/1").WithMethod(Method.Post).WithQueryString("id", id).WithQueryString("jack", "jill")
+            var registration = _requestBuilder
+                .WithPath("etc/1").AndMethod(Method.Post).AndQueryString("id", id).AndQueryString("jack", "jill")
                 .Build();
 
             registration.ShouldBeEquivalentTo(
@@ -56,16 +62,15 @@ namespace EasyStub.Test.Client
         [Test]
         public void RequestBuilder_ShouldCreateRequest_WhenQueryStringAndMethodAndPortSpecified()
         {
-            var builder = new StubBuilder();
-
+        
             var id = Guid.NewGuid().ToString();
-            var registration = builder.AllRequests
+            var registration = _requestBuilder
                 .WithPath("customer/delete/645564")
-                .WithMethod(Method.Post)
-                .WithQueryString("tranId", id)
-                .WithQueryString("orgId", "64556456456")
-                .WithQueryString("custid", "654654")
-                .WithPort(9999)
+                .AndMethod(Method.Post)
+                .AndQueryString("tranId", id)
+                .AndQueryString("orgId", "64556456456")
+                .AndQueryString("custid", "654654")
+                .AndPort(9999)
                 .Build();
 
             registration.ShouldBeEquivalentTo(
@@ -83,16 +88,15 @@ namespace EasyStub.Test.Client
         [Test]
         public void Build_ShouldResetInternalState()
         {
-            var builder = new RequestBuilder(new StubBuilder());
-             builder
-                .WithPath("test/method/1")
-                .WithMethod(Method.Get).WithQueryString("customerId", "153").WithQueryString("orderId", "1314")
-                .WithBody("<Html/>", "text/html")
-                .WithHeader("X-Powered-By", "IIS")
-                .WithPort(443)
+            _requestBuilder
+                  .WithPath("test/method/1")
+                .AndMethod(Method.Get).AndQueryString("customerId", "153").AndQueryString("orderId", "1314")
+                .AndBody("<Html/>", "text/html")
+                .AndHeader("X-Powered-By", "IIS")
+                .AndPort(443)
                 .Build();
 
-            var request2 = builder.WithPath("test/method/1").Build();
+            var request2 = _requestBuilder.WithPath("test/method/1").Build();
 
             request2.ShouldEqual(new RequestRegistrationModel() {LocalPath = "test/method/1" });
         }
@@ -103,11 +107,11 @@ namespace EasyStub.Test.Client
         {
             var builder = new RequestBuilder(new StubBuilder());
             var request = builder
-                .WithPath("test/method/1").WithMethod(Method.Get)
-                .WithQueryString("customerId", "153").WithQueryString("orderId", "1314")
-                .WithBody("<Html/>", "text/html")
-                .WithHeader("X-Powered-By", "IIS")
-                .WithPort(443)
+                .WithPath("test/method/1").AndMethod(Method.Get)
+                .AndQueryString("customerId", "153").AndQueryString("orderId", "1314")
+                .AndBody("<Html/>", "text/html")
+                .AndHeader("X-Powered-By", "IIS")
+                .AndPort(443)
                 .Build();
 
             var expectedRequest = new RequestRegistrationModel

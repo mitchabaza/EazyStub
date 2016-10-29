@@ -42,6 +42,10 @@ namespace EasyStub.Server
             Container = builder.Build();
 
             configuration.DependencyResolver = new AutofacWebApiDependencyResolver(Container);
+            configuration.MessageHandlers.Add(new ProxyDelegatingHandler());
+            app.UseAutofacMiddleware(Container);
+
+
         }
     }
 }

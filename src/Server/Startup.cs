@@ -2,6 +2,7 @@
 using System.Web.Http;
 using EasyStub.Server;
 using Microsoft.Owin;
+using Microsoft.Owin.Extensions;
 using Owin;
 
 [assembly: OwinStartup(typeof(Startup))]
@@ -25,13 +26,12 @@ namespace EasyStub.Server
             var configuration = new HttpConfiguration();
 
             AutofacConfig.Configure(app,configuration);
-            app.UseAutofacMiddleware(AutofacConfig.Container);
-            configuration.MessageHandlers.Add( new ProxyDelegatingHandler());
             FormatterConfig.Configure(configuration);
             RouteConfig.Configure(configuration);
             ServiceConfig.Configure(configuration);
 
             app.UseWebApi(configuration);
+            
         }
     }
 }

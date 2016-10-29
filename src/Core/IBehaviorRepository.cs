@@ -6,7 +6,7 @@ namespace EasyStub.Core
 {
     public interface IBehaviorRepository
     {
-        void Register(StubRegistration request);
+        bool Register(StubRegistration request);
         HttpResponseModel Find(RequestRegistrationModel requestRegistrationModel);
         HttpResponseModel Unregister(RequestRegistrationModel requestRegistrationModel);
         RequestRegistrationModel[] FindByLocalPath(string localPath);

@@ -29,8 +29,13 @@ namespace EasyStub.Server.Controllers
         public IHttpActionResult Add(StubRegistration request)
         {
             _logger.WriteInformation(request.ToString());
-            _repository.Register(request);
-            return Ok( );
+            if (_repository.Register(request))
+            {
+                return Ok();
+            }
+            {
+                return Conflict();
+            }
         }
         [HttpDelete]
         [Route("Registrations/{id}")]

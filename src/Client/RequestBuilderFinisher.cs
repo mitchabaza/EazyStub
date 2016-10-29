@@ -9,7 +9,7 @@ namespace EasyStub.Client
     {
         private RequestRegistrationModel _registrationModel = new RequestRegistrationModel();
 
-        public RequestBuilderFinisher WithQueryString(string key, string value)
+        public RequestBuilderFinisher AndQueryString(string key, string value)
         {
             Ensure.That(key).IsNotEmpty();
             Ensure.That(value).IsNotEmpty();
@@ -27,7 +27,7 @@ namespace EasyStub.Client
             return this;
         }
 
-        public RequestBuilderFinisher WithPort(int port)
+        public RequestBuilderFinisher AndPort(int port)
         {
             Ensure.That(port).IsInRange(0, short.MaxValue);
             _registrationModel.Port.Any = false;
@@ -36,7 +36,7 @@ namespace EasyStub.Client
             return this;
         }
 
-        public RequestBuilderFinisher WithMethod(Method method)
+        public RequestBuilderFinisher AndMethod(Method method)
         {
             Ensure.That(method).IsNotNull();
             _registrationModel.Method.Any = false;
@@ -44,7 +44,7 @@ namespace EasyStub.Client
             return this;
         }
 
-        public RequestBuilderFinisher WithHeader(string key, string value)
+        public RequestBuilderFinisher AndHeader(string key, string value)
         {
             Ensure.That(key).IsNotNull();
             Ensure.That(value).IsNotNull();
@@ -57,7 +57,7 @@ namespace EasyStub.Client
             return this;
         }
 
-        public RequestBuilderFinisher WithBody(string data, string mediaType, string charset)
+        public RequestBuilderFinisher AndBody(string data, string mediaType, string charset)
         {
             _registrationModel.Body.Any = false;
             _registrationModel.Body.Value = new Body()
@@ -83,7 +83,7 @@ namespace EasyStub.Client
             _registrationModel = new RequestRegistrationModel();
         }
 
-        public RequestBuilderFinisher WithBody(string data, string mediaType)
+        public RequestBuilderFinisher AndBody(string data, string mediaType)
         {
             _registrationModel.Body.Any = false;
             _registrationModel.Body.Value = new Body() {Data = data, ContentType = new ContentType() {MediaType = mediaType}};

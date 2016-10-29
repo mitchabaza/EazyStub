@@ -67,7 +67,7 @@
     <Compile Include="ResponseBuilderFinisher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestBuilder.cs" />
-    <Compile Include="StubException.cs" />
+    <Compile Include="StubApiException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

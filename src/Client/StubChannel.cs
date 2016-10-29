@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Net;
+using System.Security.Policy;
 using EasyStub.Common;
 using EasyStub.Common.Request;
 using Newtonsoft.Json;
 using RestSharp;
-using Method = RestSharp.Method; 
+using Method = RestSharp.Method;
 
 namespace EasyStub.Client
 {
@@ -12,10 +13,15 @@ namespace EasyStub.Client
     {
         private readonly RestClient _client;
         const string StubsResource = "Registrations";
-         
-        public StubChannel(string server)
+
+        public StubChannel(string serverUri)
         {
-            _client = new RestClient() {BaseUrl = new Uri(server)};
+            Uri uri;
+            if (!Uri.TryCreate(serverUri, UriKind.RelativeOrAbsolute, out uri))
+            {
+                throw new ArgumentException("Invalid URI",nameof(serverUri));
+            }
+            _client = new RestClient() {BaseUrl = new Uri(serverUri)};
         }
 
 
@@ -28,7 +34,8 @@ namespace EasyStub.Client
 
         public void UnRegister(StubRegistration stubRegistration)
         {
-            var request = new RestRequestEx(StubsResource + "/" + stubRegistration.GetHashCode().ToString(), Method.DELETE);
+            var request = new RestRequestEx(StubsResource + "/" + stubRegistration.GetHashCode(),
+                Method.DELETE);
             Execute(request);
         }
 
@@ -71,25 +78,37 @@ namespace EasyStub.Client
             throw new ArgumentException();
         }
 
+        /// <summary>
+        /// Lists all currently registered <see cref="StubRegistration" objects/>
+        /// </summary>
+        /// <returns></returns>
         public StubRegistration[] List()
         {
             var request = new RestRequestEx(StubsResource, Method.GET);
             var response = Execute(request);
-            
-            return JsonConvert.DeserializeObject<StubRegistration[]>(response.Content, new JsonSerializerSettings() {ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor});
+
+            return JsonConvert.DeserializeObject<StubRegistration[]>(response.Content,
+                new JsonSerializerSettings()
+                {
+                    ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor
+                });
         }
 
-        
+
         private IRestResponse Execute(IRestRequest request)
         {
             var response = _client.Execute(request);
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                throw new StubException(response.Content);
+                throw new StubApiException(response.ErrorMessage ?? response.Content);
             }
+
             return response;
         }
 
+        /// <summary>
+        /// Removes any previously registered Stubs 
+        /// </summary>
         public void Reset()
         {
             var request = new RestRequestEx(StubsResource, Method.DELETE);

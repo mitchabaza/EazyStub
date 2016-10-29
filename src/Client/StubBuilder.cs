@@ -2,7 +2,6 @@
 {
     public class StubBuilder
     {
-         
         internal RequestBuilder RequestBuilder { get; }
         internal RequestBuilderFinisher RequestBuilderFinisher { get; set; }
 
@@ -10,11 +9,19 @@
 
         public StubBuilder()
         {
-            
-            RequestBuilder= new RequestBuilder(this);
+            RequestBuilder = new RequestBuilder(this);
+            ResponseBuilder = new ResponseBuilder(this);
+        }
+
+        public StubBuilder(StubChannel channel)
+        {
+            Channel = channel;
+            RequestBuilder = new RequestBuilder(this);
             ResponseBuilder = new ResponseBuilder(this);
         }
 
         public RequestBuilder AllRequests => RequestBuilder;
+
+        public StubChannel Channel { get; }
     }
 }

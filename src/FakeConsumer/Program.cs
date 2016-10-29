@@ -5,28 +5,29 @@ using EasyStub.Common.Request;
 
 namespace FakeConsumer
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
+            Settings.SetServerUrl("http://localhost/EasyStub");
             var builder = new StubBuilder();
 
-            Settings.SetServerUrl("http://localhost/EasyStub");
+
             new StubChannel(Settings.Url).Reset();
 
-            builder.AllRequests.WithPath("customer/add").WithMethod(Method.Post)
+            builder
+                .AllRequests.WithPath("customer/add").AndMethod(Method.Post)
                 .WillReturnResponse()
                 .WithStatusCode(HttpStatusCode.Conflict)
                 .WithBody(new {Message = "Customer Already Exists"}.ToJson())
-                .Register();
+                .BuildAndRegister();
 
             builder.AllRequests.WithPath("customer/2")
                 .WillReturnResponse()
                 .WithStatusCode(HttpStatusCode.OK)
                 .WithBody(new {Customer = "Jack Black", DOB = DateTime.Now.AddYears(-43)}.ToJson())
                 .WithHeader("AuthToken", Guid.NewGuid().ToString())
-                .Register();
-
+                .BuildAndRegister();
         }
     }
 }
