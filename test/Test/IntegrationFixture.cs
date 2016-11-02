@@ -65,7 +65,7 @@ namespace EasyStub.Test
         }
 
         [Test]
-        public void MatchedRequest_ShouldReturnStubResponse()
+        public void MatchedRequest_ShouldReturnStubResponse_WhenMethodAndPathMatch()
         {
             var returnPayload = new {CustomerID = 1, FirstName = "Mitch", LastName = "Abaza"}.ToJson();
             var client = new StubChannel(Settings.Url);
@@ -78,6 +78,29 @@ namespace EasyStub.Test
                 .Build();
 
             client.Register(behaviorRegistrationRequest);
+
+            var response = client.Send(behaviorRegistrationRequest.Request);
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.Content.Should().Be(returnPayload);
+            response.ContentType.Should().Be("application/json; charset=utf-8");
+        }
+        [Test]
+        public void MatchedRequest_ShouldReturnStubResponse_WhenMethodHeaderAndPathMatch()
+        {
+            var returnPayload = new { OrderId = Guid.NewGuid().ToString(), Date=DateTime.Now }.ToJson();
+            var client = new StubChannel(Settings.Url);
+            var builder = new StubBuilder();
+            var authToken = "kj298sadnlsad93koasdzxcnkajsre191";
+
+            var behaviorRegistrationRequest = builder.AllRequests
+                .WithPath("customer/get/1").AndHeader("AuthToken",authToken)
+                .AndMethod(Method.Get).WillReturnResponse()
+                .WithStatusCode(HttpStatusCode.OK).WithBody(returnPayload, "application/json", Encoding.UTF8.WebName)
+                .Build();
+
+            client.Register(behaviorRegistrationRequest);
+            Console.WriteLine(behaviorRegistrationRequest.ToJson());
 
             var response = client.Send(behaviorRegistrationRequest.Request);
 

@@ -17,6 +17,7 @@ namespace EasyStub.Core
             if (_registeredRequests.TryAdd(request.Request.GetHashCode(), request))
             {
                 return true;
+                 
             }
             return false;
         }

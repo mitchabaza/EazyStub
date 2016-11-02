@@ -18,7 +18,7 @@ namespace EasyStub.Core
                                                         &&
                                                         (m.Body.Any || m.Body.Value != null && m.Body.Value.Equals(requestMessage.Body))
                                                         &&
-                                                        (m.Headers.Any || m.Headers.Value != null && m.Headers.Value.Equals(requestMessage.Headers))
+                                                        (m.Headers.Any || m.Headers.Value != null && m.Headers.Value.Contains(requestMessage.Headers))
                                                         &&
                                                         (m.Port.Any || m.Port.Value.Equals(requestMessage.Port))
                                                         &&

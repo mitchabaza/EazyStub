@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace EasyStub.Test
 {
     [TestFixture]
-    public class HeaderFixture
+    public class HeadersFixture
     {
         [Test]
         public void Equals_ShouldReturnTrue_WhenKeyAndValueSame()
@@ -32,7 +32,18 @@ namespace EasyStub.Test
             headers2.ShouldNotEqual(headers1);
             headers2.GetHashCode().Should().NotBe(headers1.GetHashCode());
         }
+        [Test]
+        public void Equals_ShouldReturnTrue_WhenKeyAndValueExistsInSecond()
+        {
+            var headers1 = new Headers();
+            headers1.Add("a", "1");
+            headers1.Add("b", "2");
+            var headers2 = new Headers();
+            headers1 = new Headers();
+            headers1.Add("a", "1");
 
+            headers2.ShouldEqual(headers1);
+        }
         [Test]
         public void Add_ShouldThrow_WhenValueIsNull()
         {

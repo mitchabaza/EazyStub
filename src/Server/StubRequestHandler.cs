@@ -29,12 +29,12 @@ namespace EasyStub.Server
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-
+            //this is a real route, delegate to the base class and bail
             if (RouteIsReal(request))
             {
                 return base.SendAsync(request, cancellationToken);
             }
-     
+            
             var response = _evaluator.FindRegisteredResponse(_transformer.Transform(request));
             if (response != null)
             {
@@ -48,6 +48,7 @@ namespace EasyStub.Server
 
                 return task.Task;
             }
+            //no matching stub routes found, delegate to the base which should return a 404
             return base.SendAsync(request, cancellationToken);
         }
 

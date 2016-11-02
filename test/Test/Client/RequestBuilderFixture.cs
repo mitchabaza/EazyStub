@@ -125,7 +125,7 @@ namespace EasyStub.Test.Client
                     Any = false,
                     Value = new Body() {Data = "<Html/>", ContentType = new ContentType() {MediaType = "text/html"}}
                 },
-                Headers = {Any = false, Value = new Headers(new Dictionary<string, string>() {{"X-Powered-By", "IIS"}})}
+                Headers = {Any = false, Value = new Headers(new Dictionary<string, string>() {{"x-powered-by", "IIS"}})}
             };
             request.ShouldEqual(expectedRequest);
         }

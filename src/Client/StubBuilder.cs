@@ -22,6 +22,6 @@
 
         public RequestBuilder AllRequests => RequestBuilder;
 
-        public StubChannel Channel { get; }
+        internal StubChannel Channel { get; }
     }
 }

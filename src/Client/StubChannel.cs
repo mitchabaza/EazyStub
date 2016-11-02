@@ -14,6 +14,7 @@ namespace EasyStub.Client
         private readonly RestClient _client;
         const string StubsResource = "Registrations";
 
+        public StubBuilder Builder { get; }
         public StubChannel(string serverUri)
         {
             Uri uri;
@@ -22,6 +23,7 @@ namespace EasyStub.Client
                 throw new ArgumentException("Invalid URI",nameof(serverUri));
             }
             _client = new RestClient() {BaseUrl = new Uri(serverUri)};
+            Builder = new StubBuilder(this);
         }
 
 
@@ -49,7 +51,11 @@ namespace EasyStub.Client
                     request.AddHeader(header.Key, header.Value);
                 }
             request.RequestFormat = DataFormat.Json;
-            request.AddBody(requestRegistrationModel.Body);
+            if (!requestRegistrationModel.Body.Any)
+            {
+                request.AddBody(requestRegistrationModel.Body.Value);
+                request.RequestFormat= DataFormat.Json;
+            }
             return Execute(request);
         }
 
@@ -79,7 +85,7 @@ namespace EasyStub.Client
         }
 
         /// <summary>
-        /// Lists all currently registered <see cref="StubRegistration" objects/>
+        /// Lists all currently registered <see cref="StubRegistration"/> objects/>
         /// </summary>
         /// <returns></returns>
         public StubRegistration[] List()

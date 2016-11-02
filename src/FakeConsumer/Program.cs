@@ -11,10 +11,8 @@ namespace FakeConsumer
         {
             Settings.SetServerUrl("http://localhost/EasyStub");
             var builder = new StubBuilder();
-
-
+            
             new StubChannel(Settings.Url).Reset();
-
             builder
                 .AllRequests.WithPath("customer/add").AndMethod(Method.Post)
                 .WillReturnResponse()

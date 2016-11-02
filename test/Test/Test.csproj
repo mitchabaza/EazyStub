@@ -96,7 +96,7 @@
   <ItemGroup>
     <Compile Include="BodyFixture.cs" />
     <Compile Include="Client\ResponseBuilderFixture.cs" />
-    <Compile Include="HeaderFixture.cs" />
+    <Compile Include="HeadersFixture.cs" />
     <Compile Include="MethodFixture.cs" />
     <Compile Include="Util\ArrayExtensions.cs" />
     <Compile Include="Util\ArrayTraverse.cs" />

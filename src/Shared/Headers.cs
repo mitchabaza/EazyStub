@@ -25,14 +25,14 @@ namespace EasyStub.Common
         {
             Ensure.That(key).IsNotNullOrEmpty();
             Ensure.That(value).IsNotNullOrEmpty();
-
-            if (Dictionary.ContainsKey(key))
+            //IIS converts all request headers to lowercase, so let's do the same to ours 
+            if (Dictionary.ContainsKey(key.ToLower()))
             {
-                Dictionary[key] += "," + value;
+                Dictionary[key.ToLower()] += "," + value;
             }
             else
             {
-                Dictionary.Add(key, value);
+                Dictionary.Add(key.ToLower(), value);
             }
         }
 
@@ -50,6 +50,33 @@ namespace EasyStub.Common
             return DictionaryComparer.CheckEquality(Dictionary, other?.Dictionary);
         }
 
+        public bool Contains(Headers other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+            foreach (var key in Dictionary.Keys)
+            {
+                if (other.Dictionary.ContainsKey(key))
+                {
+                    if (other.Dictionary[key].Equals(this.Dictionary[key]))
+                    {
+
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            return true;
+        }
         public override string ToString()
         {
             if (Dictionary.Count == 0)

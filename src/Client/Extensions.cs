@@ -15,12 +15,12 @@ namespace EasyStub.Client
             }
         }
 
-        //public static void Register(this ResponseBuilderFinisher registration)
-        //{
-        //    Validate();
-        //    var s = new StubChannel(Settings.Url);
-        //    s.Register(registration.Build());
-        //}
+        public static void Register(this ResponseBuilderFinisher registration)
+        {
+            Validate();
+            var s = new StubChannel(Settings.Url);
+            s.Register(registration.Build());
+        }
 
         public static string ToJson(this object obj)
         {
