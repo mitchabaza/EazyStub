@@ -85,6 +85,7 @@ namespace EasyStub.Test
             response.Content.Should().Be(returnPayload);
             response.ContentType.Should().Be("application/json; charset=utf-8");
         }
+
         [Test]
         public void MatchedRequest_ShouldReturnStubResponse_WhenMethodHeaderAndPathMatch()
         {
